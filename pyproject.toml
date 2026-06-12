@@ -5,7 +5,9 @@ description = "Quotient-tower accelerated search for simplices in sparse graphs.
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 license = { file = "LICENSE" }
-dependencies = []
+dependencies = [
+  "state-collapser",
+]
 
 [dependency-groups]
 dev = [
@@ -18,6 +20,9 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 package = true
+
+[tool.uv.sources]
+state-collapser = { path = "../state_collapser", editable = true }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
