@@ -24,6 +24,18 @@ def identity_edge_vertex_id(edge_id: str) -> str:
     return unquote(edge_id[len(prefix) :])
 
 
+def skeleton_edge_id(source: str, target: str) -> str:
+    """Return the canonical skeleton edge id for an ordered endpoint pair."""
+
+    return f"jss:skeleton-edge:{_escape(source)}:{_escape(target)}"
+
+
+def tier_simple_edge_id(tier: int, source: str, target: str) -> str:
+    """Return the canonical simple edge id for one tower tier endpoint pair."""
+
+    return f"jss:tier-edge:t{tier}:{_escape(source)}:{_escape(target)}"
+
+
 def simplex_id(tier: int, degree: int, vertices: tuple[str, ...]) -> str:
     """Return a deterministic simplex id."""
 
@@ -35,3 +47,9 @@ def fiber_id(downstairs_simplex_id: str, upstairs_tier: int) -> str:
     """Return a deterministic simplex-fiber id."""
 
     return f"jss:fiber:t{upstairs_tier}:over:{_escape(downstairs_simplex_id)}"
+
+
+def h_lift_id(simplex_id: str) -> str:
+    """Return the canonical H-lift record id for a skeleton simplex id."""
+
+    return f"jss:h-lift:{_escape(simplex_id)}"

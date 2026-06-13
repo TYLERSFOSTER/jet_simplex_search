@@ -84,7 +84,10 @@ def test_non_degenerate_upstairs_edge_over_degenerate_downstairs_edge_is_emitted
         for simplex in lifted.simplices_by_degree[1]
     }
 
-    assert any(lifted_simplices[simplex_id].vertices == ("a", "b") for simplex_id in fiber.upstairs_simplex_ids)
+    assert any(
+        lifted_simplices[simplex_id].vertices == ("a", "b")
+        for simplex_id in fiber.upstairs_simplex_ids
+    )
 
 
 def test_candidate_must_be_in_frontier_and_edge_fiber() -> None:
@@ -105,7 +108,11 @@ def test_candidate_must_be_in_frontier_and_edge_fiber() -> None:
     cd_fiber = next(
         fiber
         for fiber in lifted.simplex_fibers
-        if any(simplex.vertices == ("C", "D") and simplex.id == fiber.downstairs_simplex_id for simplex in downstairs[1])
+        if any(
+            simplex.vertices == ("C", "D")
+            and simplex.id == fiber.downstairs_simplex_id
+            for simplex in downstairs[1]
+        )
     )
     lifted_edges = {
         simplex.id: simplex.vertices
@@ -117,3 +124,105 @@ def test_candidate_must_be_in_frontier_and_edge_fiber() -> None:
         ("b", "d"),
     }
 
+
+def test_missing_downstairs_two_simplex_prevents_upstairs_triangle_search() -> None:
+    adapter = TriangleOverBoundaryAdapter()
+    downstairs_all = enumerate_direct_simplices(
+        normalized_graph_for_tier(adapter, 1),
+        tier=1,
+        k=2,
+    )
+    downstairs_without_interiors = {
+        0: downstairs_all[0],
+        1: downstairs_all[1],
+        2: (),
+    }
+
+    lifted = lift_tier_simplices(
+        adapter=adapter,
+        upstairs_tier=0,
+        downstairs_simplices_by_degree=downstairs_without_interiors,
+        k=2,
+    )
+
+    assert lifted.simplices_by_degree[2] == ()
+
+
+class TriangleOverBoundaryAdapter:
+    """Fake tower where upstairs has a triangle but no downstairs 2-record is supplied."""
+
+    def tiers(self) -> tuple[int, ...]:
+        return (0, 1)
+
+    def bottommost_nondegenerate_tier(self) -> int:
+        return 1
+
+    def tier_vertices(self, tier: int) -> tuple[str, ...]:
+        if tier == 1:
+            return ("C", "D", "E")
+        if tier == 0:
+            return ("a", "b", "c")
+        return ()
+
+    def tier_edges(self, tier: int) -> tuple[str, ...]:
+        if tier == 1:
+            return ("CD", "CE", "DE")
+        if tier == 0:
+            return ("ab", "ac", "bc")
+        return ()
+
+    def edge_source(self, tier: int, edge_id: str) -> str:
+        return {
+            (1, "CD"): "C",
+            (1, "CE"): "C",
+            (1, "DE"): "D",
+            (0, "ab"): "a",
+            (0, "ac"): "a",
+            (0, "bc"): "b",
+        }[(tier, edge_id)]
+
+    def edge_target(self, tier: int, edge_id: str) -> str:
+        return {
+            (1, "CD"): "D",
+            (1, "CE"): "E",
+            (1, "DE"): "E",
+            (0, "ab"): "b",
+            (0, "ac"): "c",
+            (0, "bc"): "c",
+        }[(tier, edge_id)]
+
+    def project_vertex(self, tier: int, vertex_id: str) -> str:
+        if tier != 0:
+            raise KeyError("fake adapter only projects tier 0")
+        return {"a": "C", "b": "D", "c": "E"}[vertex_id]
+
+    def project_edge(self, tier: int, edge_id: str) -> str:
+        if tier != 0:
+            raise KeyError("fake adapter only projects tier 0")
+        return {
+            "ab": "CD",
+            "ac": "CE",
+            "bc": "DE",
+            identity_edge_id("a"): identity_edge_id("C"),
+            identity_edge_id("b"): identity_edge_id("D"),
+            identity_edge_id("c"): identity_edge_id("E"),
+        }[edge_id]
+
+    def edge_fiber_targets(
+        self,
+        *,
+        upstairs_tier: int,
+        downstairs_edge_id: str,
+        upstairs_source_id: str,
+    ) -> frozenset[str]:
+        if upstairs_tier != 0:
+            return frozenset()
+        lookup = {
+            ("CD", "a"): frozenset({"b"}),
+            ("CE", "a"): frozenset({"c"}),
+            ("DE", "b"): frozenset({"c"}),
+            (identity_edge_id("C"), "a"): frozenset({"a"}),
+            (identity_edge_id("D"), "b"): frozenset({"b"}),
+            (identity_edge_id("E"), "c"): frozenset({"c"}),
+        }
+        return lookup.get((downstairs_edge_id, upstairs_source_id), frozenset())

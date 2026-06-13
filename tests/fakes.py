@@ -88,3 +88,5 @@ class FakeStaticTowerAdapter:
         }
         return lookup.get((downstairs_edge_id, upstairs_source_id), frozenset())
 
+    def tier0_vertex_id_to_input_vertex_id(self) -> dict[str, str]:
+        return {"a": "a", "b": "b", "d": "d"}

@@ -173,3 +173,21 @@ def assert_normalized_graph_invariants(graph: NormalizedGraph) -> None:
                 f"Adjacency for {source!r} is missing target {target!r}."
             )
 
+
+def assert_simple_reflexive_normalized_graph(graph: NormalizedGraph) -> None:
+    """Raise when a normalized graph is not simple-reflexive."""
+
+    assert_normalized_graph_invariants(graph)
+    for (source, target), lookup_edge_ids in graph.edge_lookup.items():
+        if len(lookup_edge_ids) != 1:
+            raise SimplexInvariantError(
+                f"Simple-reflexive graph must have exactly one edge for "
+                f"{source!r} -> {target!r}; got {len(lookup_edge_ids)}."
+            )
+        if source == target:
+            edge_id = lookup_edge_ids[0]
+            edge = next(item for item in graph.edges if item.id == edge_id)
+            if edge.kind != "identity":
+                raise SimplexInvariantError(
+                    f"Loop edge {edge_id!r} must be the formal identity."
+                )

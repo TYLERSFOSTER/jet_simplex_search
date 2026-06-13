@@ -7,8 +7,10 @@ from jet_simplex_search.normalize import (
     NormalizedEdge,
     NormalizedGraph,
     assert_normalized_graph_invariants,
+    assert_simple_reflexive_normalized_graph,
     normalize_graph,
 )
+from jet_simplex_search.skeleton import skeletonize_graph
 
 
 def test_no_loop_graph_gains_one_identity_per_vertex() -> None:
@@ -91,3 +93,33 @@ def test_invariant_checker_rejects_original_loop() -> None:
     with pytest.raises(SimplexInvariantError, match="must not be a loop"):
         assert_normalized_graph_invariants(graph)
 
+
+def test_simple_reflexive_checker_rejects_parallel_edges() -> None:
+    graph = GraphInput(
+        vertices=(InputVertex("s"), InputVertex("t")),
+        edges=(InputEdge("e1", "s", "t"), InputEdge("e2", "s", "t")),
+    )
+    normalized = normalize_graph(graph)
+
+    with pytest.raises(SimplexInvariantError, match="exactly one edge"):
+        assert_simple_reflexive_normalized_graph(normalized)
+
+
+def test_normalized_skeleton_graph_is_simple_reflexive() -> None:
+    graph = GraphInput(
+        vertices=(InputVertex("a"), InputVertex("b")),
+        edges=(
+            InputEdge("ab1", "a", "b"),
+            InputEdge("ab2", "a", "b"),
+            InputEdge("loop_a_1", "a", "a"),
+            InputEdge("loop_a_2", "a", "a"),
+        ),
+    )
+
+    skeleton = skeletonize_graph(graph)
+    normalized = normalize_graph(skeleton.skeleton_graph)
+
+    assert_simple_reflexive_normalized_graph(normalized)
+    assert normalized.edge_lookup[("a", "a")] == (identity_edge_id("a"),)
+    assert normalized.edge_lookup[("b", "b")] == (identity_edge_id("b"),)
+    assert len(normalized.edge_lookup[("a", "b")]) == 1

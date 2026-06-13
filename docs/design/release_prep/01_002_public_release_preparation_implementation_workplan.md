@@ -504,8 +504,9 @@ Implementation:
   - GitHub-only release;
   - no PyPI claim;
   - no Kan replacement yet;
-  - meaningful non-identity input loops deferred;
-  - one-simplex-per-multigraph-witness-choice deferred;
+  - expanded H witness assignment artifacts are deferred;
+  - upstream `state_collapser` simple-reflexive tier construction mode remains
+    a release blocker if not yet available in the dependency release;
   - no benchmark-superiority claim;
   - no accelerated backend claim.
 - Keep section short and public-friendly.
@@ -1539,7 +1540,8 @@ This implementation workplan is complete when:
 - Uploading release assets.
 - Making the repository public.
 - Implementing Kan replacement.
-- Implementing meaningful non-identity loop semantics.
-- Implementing one simplex per multigraph witness choice.
+- Implementing expanded H witness assignment artifacts by default.
+- Implementing `state_collapser` upstream release actions without explicit
+  Project Owner approval.
 - Adding coverage reporting.
 - Adding GitHub Pages or hosted documentation.

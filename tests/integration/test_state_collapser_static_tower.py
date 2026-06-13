@@ -67,5 +67,14 @@ def test_search_simplices_uses_real_state_collapser_adapter() -> None:
         k=1,
     )
 
-    assert result.simplices_by_tier_degree
-    assert result.fibers
+    assert result.skeleton_search.simplices_by_tier_degree
+    assert result.skeleton_search.fibers
+    assert result.h_lifts
+
+
+def test_state_collapser_adapter_maps_tier_zero_vertices_to_input_ids() -> None:
+    adapter = StateCollapserStaticTowerAdapter.from_graph(_contracting_graph())
+
+    mapping = adapter.tier0_vertex_id_to_input_vertex_id()
+
+    assert set(mapping.values()) == {"a", "b", "d"}

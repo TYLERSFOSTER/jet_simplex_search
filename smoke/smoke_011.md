@@ -9,9 +9,16 @@ uv run python smoke/smoke_011.py
 Output:
 
 ```text
+Skeleton simplex counts
 tier | dim 0 | dim 1 | dim 2 | dim 3 | dim 4
 -----+-------+-------+-------+-------+------
    0 |     4 |     8 |    12 |    16 |    20
+
+Tier-0 H-lift counts
+            metric | dim 0 | dim 1 | dim 2 | dim 3 | dim 4
+-------------------+-------+-------+-------+-------+------
+positive addresses |     4 |     4 |     0 |     0 |     0
+     total H-lifts |     4 |     4 |     0 |     0 |     0
 ```
 
 No error found.

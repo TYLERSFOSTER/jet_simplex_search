@@ -9,12 +9,19 @@ uv run python smoke/smoke_015.py
 Output:
 
 ```text
+Skeleton simplex counts
 tier | dim 0 | dim 1 | dim 2 | dim 3 | dim 4
 -----+-------+-------+-------+-------+------
    0 |     2 |     3 |     4 |     5 |     6
+
+Tier-0 H-lift counts
+            metric | dim 0 | dim 1 | dim 2 | dim 3 | dim 4
+-------------------+-------+-------+-------+-------+------
+positive addresses |     2 |     2 |     2 |     2 |     2
+     total H-lifts |     2 |     2 |     2 |     2 |     2
 ```
 
-No error found under the current normalization policy.
+No error found under the current H-to-G skeletonization and H-lift policy.
 
 The input graph contains:
 
@@ -23,10 +30,9 @@ a -> a
 a -> b
 ```
 
-First-scope normalization strips input loops and then adds exactly one formal
-identity at every vertex. Therefore the input loop `a -> a` does not create an
-extra simplex witness or a second loop. The normalized graph behaves like the
-single-edge graph:
+Skeleton search strips the input loop from the live skeleton edge set and then
+adds one formal identity at every vertex. Therefore the skeleton graph behaves
+like the single-edge graph:
 
 ```text
 a -> b
@@ -46,4 +52,8 @@ For dimensions `0..4`, this gives:
 2, 3, 4, 5, 6
 ```
 
-Meaningful non-identity input-loop semantics are intentionally deferred.
+The H-lift table records the original loop separately. The degenerate faces at
+`a` lift through the actual input loop `a -> a`, while degenerate faces at `b`
+have no H-lift because there is no loop at `b`. This leaves two positive
+addresses in every positive dimension: the totally `a`-degenerate address and
+the address with repetitions at `a` followed by `b`.

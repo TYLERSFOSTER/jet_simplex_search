@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, slots=True)
 class FaceEdgeWitness:
-    """Concrete edge witnesses for one directed face."""
+    """Skeleton/tower edge witnesses for one directed face."""
 
     source_index: int
     target_index: int
@@ -30,7 +30,7 @@ class FaceEdgeWitness:
 
 @dataclass(frozen=True, slots=True)
 class SimplexRecord:
-    """A directed flag simplex record."""
+    """A directed flag simplex address in a skeleton/tower tier."""
 
     id: str
     tier: int
@@ -106,4 +106,3 @@ class SimplexSearchResult:
     def __post_init__(self) -> None:
         object.__setattr__(self, "fibers", tuple(self.fibers))
         object.__setattr__(self, "edge_fibers", tuple(self.edge_fibers))
-

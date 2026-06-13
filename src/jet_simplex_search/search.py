@@ -12,7 +12,10 @@ from jet_simplex_search.frontier import (
     initial_frontier,
 )
 from jet_simplex_search.ids import simplex_id
-from jet_simplex_search.normalize import NormalizedGraph
+from jet_simplex_search.normalize import (
+    NormalizedGraph,
+    assert_simple_reflexive_normalized_graph,
+)
 from jet_simplex_search.records import SimplexRecord
 from jet_simplex_search.records import SimplexSearchResult
 from jet_simplex_search.tower_adapter import (
@@ -106,6 +109,7 @@ def enumerate_direct_simplices(
     """Enumerate directed flag simplices through degree `k` in one tier."""
 
     validate_k(k)
+    assert_simple_reflexive_normalized_graph(graph)
     by_degree: dict[int, tuple[SimplexRecord, ...]] = {
         0: enumerate_zero_simplices(graph, tier=tier)
     }
