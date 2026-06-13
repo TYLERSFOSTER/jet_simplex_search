@@ -4,6 +4,17 @@
 
 Draft release-preparation design document for `jet_simplex_search`.
 
+Update note, 2026-06-13:
+
+This plan remains relevant as the broad release-prep skeleton, but it predates
+the latest H-to-G skeletonization release surface, Malik lineage documentation,
+`HGraphML` boundary clarification, and current metadata/test state. Read it
+together with
+`docs/design/release_prep/02_001_release_prep_current_relevance_review.md`
+before executing release-prep work. Use
+`docs/design/release_prep/02_002_public_release_preparation_updated_implementation_workplan.md`
+as the current merged implementation workplan.
+
 This document outlines what must be done before a public release. It is not an
 approval to publish, tag, upload assets, push release branches, publish to PyPI,
 or make the repository public.

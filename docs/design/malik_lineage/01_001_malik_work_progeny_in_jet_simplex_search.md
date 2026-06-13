@@ -13,8 +13,8 @@ engineering choices in this package are new refinements made for release.
 Primary source assessed:
 
 - Abdullah Naeem Malik, *Simplicial methods in graph machine learning*,
-  PhD thesis, 2024. Local PDF assessed at
-  `/Users/foster/Downloads/mythesis.pdf`.
+  PhD thesis, 2024. Assessment was made from the thesis PDF supplied by the
+  Project Owner.
 
 Related Malik portfolio sources assessed:
 

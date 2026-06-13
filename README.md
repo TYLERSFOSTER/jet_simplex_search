@@ -34,7 +34,7 @@ edges in `H` remain visible without polluting tower search.
 <table align="center">
   <tr>
     <td width="350" align="center">
-      <sub><em>The speed-up provided by `jet_simplex_search` is acheived by using a contraction hierarchy to reduce the search space.</em></sub>
+      <sub><em>The speed-up provided by `jet_simplex_search` is achieved by using a contraction hierarchy to reduce the search space.</em></sub>
     </td>
   </tr>
 </table>

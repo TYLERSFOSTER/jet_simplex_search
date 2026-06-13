@@ -5,6 +5,17 @@
 Implementation workplan for preparing `jet_simplex_search` for the approved
 `v0.1.0` GitHub-only library pre-release.
 
+Update note, 2026-06-13:
+
+This workplan should not be executed mechanically without the current relevance
+review at
+`docs/design/release_prep/02_001_release_prep_current_relevance_review.md`.
+The repo now has updated dependency state, H-to-G skeletonization and H-lift
+surfaces, a Malik lineage document, and an explicit `HGraphML` boundary that
+were not all present when this workplan was drafted. Use
+`docs/design/release_prep/02_002_public_release_preparation_updated_implementation_workplan.md`
+as the current merged implementation workplan.
+
 This document is derived from:
 
 ```text
