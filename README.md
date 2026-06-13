@@ -77,6 +77,9 @@ After tier-0 skeleton simplices are found, the package computes compressed
 H-lift counts. Degenerate skeleton faces lift to `H` precisely through actual
 loops in `H`; a formal identity in `G` is not counted as an original H loop.
 Parallel H edges produce distinct lifted H-simplices through product counts.
+$$
+H\xrightarrow{\text{red}}\widetilde{H}=: G^{0}\xrightarrow{q^{0}_{1}}G^{1}\xrightarrow{\text{red}}\widetilde{G}^{1}\xrightarrow{q^{1}_{2}}G^{2}\xrightarrow{\text{red}}\widetilde{G}^{2}\xrightarrow{q^{2}_{3}}\cdots
+$$
 
 ## Features
 
@@ -273,7 +276,7 @@ engineering around `state_collapser`, H-to-G skeletonization, witness artifacts,
 and release-facing tests.
 
 For the detailed provenance assessment, see
-[Malik Work Progeny In Jet Simplex Search](docs/design/malik_lineage/01_001_malik_work_progeny_in_jet_simplex_search.md).
+[Malik work progeny in `jet_simplex_search`](docs/design/malik_lineage/01_001_malik_work_progeny_in_jet_simplex_search.md).
 
 ## Design Spine
 
