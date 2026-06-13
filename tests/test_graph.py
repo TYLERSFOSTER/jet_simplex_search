@@ -1,7 +1,12 @@
 import pytest
 
 from jet_simplex_search.errors import InvalidGraphError
-from jet_simplex_search.graph import GraphInput, InputEdge, InputVertex, graph_from_edges
+from jet_simplex_search.graph import (
+    GraphInput,
+    InputEdge,
+    InputVertex,
+    graph_from_edges,
+)
 
 
 def test_constructs_one_vertex_graph() -> None:
@@ -45,4 +50,3 @@ def test_graph_from_edges_builds_vertices() -> None:
 
     assert tuple(vertex.id for vertex in graph.vertices) == ("a", "b")
     assert graph.edges[0].source == "b"
-

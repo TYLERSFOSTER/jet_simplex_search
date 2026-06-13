@@ -10,6 +10,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
+[![CI](https://img.shields.io/badge/CI-configured-lightgrey.svg)](.github/workflows/test.yml)
 [![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](tests)
 [![Lint](https://img.shields.io/badge/lint-ruff-46a2f1.svg)](https://docs.astral.sh/ruff/)
 [![Status](https://img.shields.io/badge/status-pre--release-orange.svg)](#release-status)
@@ -228,6 +229,13 @@ Run Ruff:
 
 ```bash
 uv run ruff check .
+uv run ruff format --check .
+```
+
+Run release hygiene:
+
+```bash
+uv run python scripts/release_hygiene.py --repo-root .
 ```
 
 ## Release Status
@@ -244,13 +252,19 @@ Implemented and locally tested:
 - diagnostics;
 - JSON/JSONL artifacts;
 - low-dimensional smoke examples.
+- README quick-start regression;
+- smoke snapshot and smoke-doc coverage;
+- release hygiene checks;
+- GitHub Actions workflow configuration;
+- release notes, security policy, and contribution guide.
 
 Still pending before public release:
 
-- CI workflow;
-- release hygiene automation;
-- changelog or release notes;
+- remote CI pass on GitHub;
 - final source distribution and wheel verification.
+- clean installed-wheel verification.
+- explicit Project Owner approval before any tag, release asset, visibility
+  change, or publication.
 
 ## Known Limitations
 
@@ -262,6 +276,9 @@ This is a library pre-release, and the current scope is deliberately narrow:
   quotient edges collapse.
 - Tower search is static; it does not rebuild the tower during simplex search.
 - There is no bitset, CSR, GPU, tensor, or multiprocessing acceleration yet.
+- Neural message passing, CinchNET, and PTVNN are not implemented in this repo;
+  [`HGraphML`](https://github.com/TYLERSFOSTER/HGraphML) is the separate
+  quotient-tower-backed graph message-passing branch.
 - `search_simplices` studies graph `H`; lower-level skeleton/tower search is
   exposed separately as `search_skeleton_simplices`.
 

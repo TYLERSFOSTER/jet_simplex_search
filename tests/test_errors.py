@@ -24,4 +24,3 @@ def test_package_errors_share_base(error_type: type[Exception]) -> None:
     assert issubclass(error_type, JetSimplexSearchError)
     with pytest.raises(error_type, match="clear"):
         raise error_type("clear message")
-

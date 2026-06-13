@@ -73,4 +73,3 @@ def test_records_carry_prefix_target_frontier_and_witnesses() -> None:
     assert simplex.target_vertex == "t"
     assert simplex.frontier == frozenset({"t"})
     assert simplex.face_edge_witnesses
-

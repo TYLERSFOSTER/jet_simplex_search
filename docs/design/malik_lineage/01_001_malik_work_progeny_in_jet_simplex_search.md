@@ -1234,7 +1234,7 @@ from Malik's simplicial graph-search program.
 
 It should not yet be advertised as:
 
-- a complete implementation of Malik's thesis;
+- not a complete implementation of Malik's thesis;
 - a Kan replacement engine;
 - a neural simplicial learning framework;
 - a general categorical algebra package.

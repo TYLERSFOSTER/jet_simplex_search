@@ -32,7 +32,9 @@ def test_search_simplices_with_graph_returns_h_lift_result() -> None:
 
     assert isinstance(result, SearchWithHLiftsResult)
     assert result.skeleton_search.simplices_by_tier_degree
-    edge_lift = next(record for record in result.h_lifts if record.input_vertices == ("a", "b"))
+    edge_lift = next(
+        record for record in result.h_lifts if record.input_vertices == ("a", "b")
+    )
     assert edge_lift.h_lift_count == 2
 
 

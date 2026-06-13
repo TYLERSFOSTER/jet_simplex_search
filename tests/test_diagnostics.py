@@ -25,4 +25,3 @@ def test_search_diagnostics_counts_simplices_and_degenerates() -> None:
     assert diagnostics.emitted_simplex_count > 0
     assert diagnostics.simplex_fiber_count == len(result.fibers)
     assert diagnostics.degenerate_counts_by_tier_degree
-

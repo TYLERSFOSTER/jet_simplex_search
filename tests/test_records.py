@@ -64,4 +64,3 @@ def test_simplex_record_validates_degenerate_flag() -> None:
             is_degenerate=False,
             projection_simplex_id=None,
         )
-

@@ -19,7 +19,11 @@ def print_simplex_count_table(
     )
     search_result = getattr(result, "skeleton_search", result)
     print("Skeleton simplex counts")
-    print(format_simplex_count_table(search_result.diagnostics.simplex_counts_by_tier_degree))
+    print(
+        format_simplex_count_table(
+            search_result.diagnostics.simplex_counts_by_tier_degree
+        )
+    )
     if hasattr(result, "h_lift_diagnostics"):
         print()
         print("Tier-0 H-lift counts")
@@ -37,7 +41,8 @@ def format_simplex_count_table(counts: Mapping[tuple[int, int], int]) -> str:
 
     headers = ["tier"] + [f"dim {dimension}" for dimension in dimensions]
     rows = [
-        [str(tier)] + [str(counts.get((tier, dimension), 0)) for dimension in dimensions]
+        [str(tier)]
+        + [str(counts.get((tier, dimension), 0)) for dimension in dimensions]
         for tier in tiers
     ]
 

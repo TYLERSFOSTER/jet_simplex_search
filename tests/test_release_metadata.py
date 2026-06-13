@@ -45,9 +45,19 @@ def test_release_metadata_has_urls_classifiers_and_ruff() -> None:
     assert urls["Homepage"].endswith("/jet_simplex_search")
     assert urls["Repository"].endswith("/jet_simplex_search")
     assert urls["Issues"].endswith("/jet_simplex_search/issues")
+    assert urls["Source"].endswith("/jet_simplex_search")
+    assert set(project["keywords"]) >= {
+        "simplicial-complexes",
+        "directed-graphs",
+        "quotient-towers",
+        "graph-algorithms",
+        "state-collapser",
+    }
     assert "Development Status :: 3 - Alpha" in project["classifiers"]
+    assert "Intended Audience :: Developers" in project["classifiers"]
     assert "Programming Language :: Python :: 3.11" in project["classifiers"]
     assert "Programming Language :: Python :: 3.12" in project["classifiers"]
+    assert "Typing :: Typed" in project["classifiers"]
     assert any(dependency.startswith("ruff") for dependency in dev_dependencies)
 
 

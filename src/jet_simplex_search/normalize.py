@@ -100,18 +100,23 @@ def normalize_graph(
             )
 
     normalized_edges = sorted(normalized_edges, key=lambda item: item.id)
-    adjacency_mut: dict[str, set[str]] = {vertex_id: {vertex_id} for vertex_id in vertices}
+    adjacency_mut: dict[str, set[str]] = {
+        vertex_id: {vertex_id} for vertex_id in vertices
+    }
     edge_lookup_mut: dict[tuple[str, str], list[str]] = {}
     for edge in normalized_edges:
         edge_lookup_mut.setdefault((edge.source, edge.target), []).append(edge.id)
         adjacency_mut.setdefault(edge.source, set()).add(edge.target)
-        adjacency_mut.setdefault(edge.target, adjacency_mut.get(edge.target, {edge.target}))
+        adjacency_mut.setdefault(
+            edge.target, adjacency_mut.get(edge.target, {edge.target})
+        )
 
     normalized = NormalizedGraph(
         vertices=vertices,
         edges=tuple(normalized_edges),
         adjacency_targets={
-            vertex_id: frozenset(targets) for vertex_id, targets in adjacency_mut.items()
+            vertex_id: frozenset(targets)
+            for vertex_id, targets in adjacency_mut.items()
         },
         edge_lookup={
             key: tuple(sorted(values)) for key, values in edge_lookup_mut.items()
@@ -156,7 +161,9 @@ def assert_normalized_graph_invariants(graph: NormalizedGraph) -> None:
         if vertex_id not in graph.adjacency_targets:
             raise SimplexInvariantError(f"Missing adjacency targets for {vertex_id!r}.")
         if vertex_id not in graph.adjacency_targets[vertex_id]:
-            raise SimplexInvariantError(f"Adjacency for {vertex_id!r} must include itself.")
+            raise SimplexInvariantError(
+                f"Adjacency for {vertex_id!r} must include itself."
+            )
 
     for (source, target), lookup_edge_ids in graph.edge_lookup.items():
         if source not in vertices or target not in vertices:

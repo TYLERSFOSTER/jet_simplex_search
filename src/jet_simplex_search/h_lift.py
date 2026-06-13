@@ -27,11 +27,17 @@ class HFaceLiftFactor:
     def __post_init__(self) -> None:
         object.__setattr__(self, "original_edge_ids", tuple(self.original_edge_ids))
         if self.source_index >= self.target_index:
-            raise SimplexInvariantError("HFaceLiftFactor requires source_index < target_index.")
+            raise SimplexInvariantError(
+                "HFaceLiftFactor requires source_index < target_index."
+            )
         if self.factor != len(self.original_edge_ids):
-            raise SimplexInvariantError("HFaceLiftFactor.factor must match edge-id count.")
+            raise SimplexInvariantError(
+                "HFaceLiftFactor.factor must match edge-id count."
+            )
         if self.is_loop_factor != (self.source_vertex_id == self.target_vertex_id):
-            raise SimplexInvariantError("HFaceLiftFactor loop flag does not match endpoints.")
+            raise SimplexInvariantError(
+                "HFaceLiftFactor loop flag does not match endpoints."
+            )
 
 
 @dataclass(frozen=True, slots=True)
@@ -78,7 +84,9 @@ class HLiftDiagnostics:
     max_face_factor_by_degree: Mapping[int, int]
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "simplex_count_by_degree", dict(self.simplex_count_by_degree))
+        object.__setattr__(
+            self, "simplex_count_by_degree", dict(self.simplex_count_by_degree)
+        )
         object.__setattr__(
             self,
             "positive_simplex_count_by_degree",

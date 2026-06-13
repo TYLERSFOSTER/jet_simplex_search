@@ -24,7 +24,9 @@ def test_no_loop_graph_gains_one_identity_per_vertex() -> None:
 
 
 def test_input_loop_is_stripped_and_recorded() -> None:
-    graph = GraphInput(vertices=(InputVertex("s"),), edges=(InputEdge("loop", "s", "s"),))
+    graph = GraphInput(
+        vertices=(InputVertex("s"),), edges=(InputEdge("loop", "s", "s"),)
+    )
 
     normalized = normalize_graph(graph)
 

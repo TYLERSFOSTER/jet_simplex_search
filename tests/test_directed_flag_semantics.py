@@ -45,9 +45,16 @@ def test_extension_outside_frontier_fails() -> None:
 
 
 def test_degenerate_extension_uses_identity_witness() -> None:
-    graph = normalize_graph(GraphInput(vertices=(InputVertex("s"), InputVertex("t")), edges=(InputEdge("st", "s", "t"),)))
+    graph = normalize_graph(
+        GraphInput(
+            vertices=(InputVertex("s"), InputVertex("t")),
+            edges=(InputEdge("st", "s", "t"),),
+        )
+    )
     simplices = enumerate_direct_simplices(graph, tier=0, k=2)
-    degenerate = next(simplex for simplex in simplices[2] if simplex.vertices == ("s", "s", "t"))
+    degenerate = next(
+        simplex for simplex in simplices[2] if simplex.vertices == ("s", "s", "t")
+    )
 
     edge_ids = tuple(
         edge_id
@@ -56,4 +63,3 @@ def test_degenerate_extension_uses_identity_witness() -> None:
     )
     assert "st" in edge_ids
     assert any(edge_id.startswith("jss:identity") for edge_id in edge_ids)
-

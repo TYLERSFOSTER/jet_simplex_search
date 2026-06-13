@@ -7,7 +7,11 @@ from dataclasses import dataclass
 
 from jet_simplex_search.ids import simplex_id
 from jet_simplex_search.normalize import NormalizedGraph
-from jet_simplex_search.records import EdgeFiberRecord, SimplexFiberRecord, SimplexRecord
+from jet_simplex_search.records import (
+    EdgeFiberRecord,
+    SimplexFiberRecord,
+    SimplexRecord,
+)
 from jet_simplex_search.search import extend_simplex_direct
 from jet_simplex_search.tower_adapter import (
     StaticTowerAdapterProtocol,
@@ -36,7 +40,11 @@ def lift_zero_simplex(
     if downstairs_simplex.degree != 0:
         msg = "lift_zero_simplex requires a degree-0 downstairs simplex."
         raise ValueError(msg)
-    graph = normalized_graph_for_tier(adapter, upstairs_tier) if upstairs_graph is None else upstairs_graph
+    graph = (
+        normalized_graph_for_tier(adapter, upstairs_tier)
+        if upstairs_graph is None
+        else upstairs_graph
+    )
     downstream_vertex = downstairs_simplex.vertices[0]
     emitted: list[SimplexRecord] = []
     for vertex_id in sorted(graph.vertices):
@@ -128,7 +136,9 @@ def lift_tier_simplices(
             if downstairs.prefix_simplex_id is None:
                 simplex_fiber_ids[downstairs.id] = ()
                 continue
-            upstairs_prefix_ids = simplex_fiber_ids.get(downstairs.prefix_simplex_id, ())
+            upstairs_prefix_ids = simplex_fiber_ids.get(
+                downstairs.prefix_simplex_id, ()
+            )
             lifted_for_downstairs: list[SimplexRecord] = []
             for upstairs_prefix_id in upstairs_prefix_ids:
                 upstairs_prefix = simplex_by_id[upstairs_prefix_id]
@@ -139,7 +149,11 @@ def lift_tier_simplices(
                         upstairs_source_id=upstairs_prefix.target_vertex,
                     )
                     edge_fiber_records[
-                        (downstairs_edge_id, upstairs_tier, upstairs_prefix.target_vertex)
+                        (
+                            downstairs_edge_id,
+                            upstairs_tier,
+                            upstairs_prefix.target_vertex,
+                        )
                     ] = EdgeFiberRecord(
                         downstairs_edge_id=downstairs_edge_id,
                         upstairs_tier=upstairs_tier,
@@ -161,7 +175,9 @@ def lift_tier_simplices(
                 sorted({simplex.id for simplex in lifted_for_downstairs})
             )
         by_degree[degree] = tuple(
-            sorted(emitted_for_degree.values(), key=lambda item: (item.vertices, item.id))
+            sorted(
+                emitted_for_degree.values(), key=lambda item: (item.vertices, item.id)
+            )
         )
 
     return LiftedTierResult(
@@ -178,4 +194,3 @@ def lift_tier_simplices(
             edge_fiber_records[key] for key in sorted(edge_fiber_records)
         ),
     )
-

@@ -61,7 +61,9 @@ def normalized_graph_for_tier(
 ) -> NormalizedGraph:
     """Build the normalized graph view of one static tower tier."""
 
-    vertices = tuple(InputVertex(vertex_id) for vertex_id in adapter.tier_vertices(tier))
+    vertices = tuple(
+        InputVertex(vertex_id) for vertex_id in adapter.tier_vertices(tier)
+    )
     edges = tuple(
         InputEdge(
             id=edge_id,
@@ -161,8 +163,7 @@ class StateCollapserStaticTowerAdapter:
     def tier_vertices(self, tier: int) -> tuple[str, ...]:
         layer = self.tower.state_layers[tier]  # type: ignore[attr-defined]
         return tuple(
-            self._state_cell_to_string(cell_id)
-            for cell_id in layer.all_cell_ids()
+            self._state_cell_to_string(cell_id) for cell_id in layer.all_cell_ids()
         )
 
     def tier_edges(self, tier: int) -> tuple[str, ...]:
@@ -174,7 +175,9 @@ class StateCollapserStaticTowerAdapter:
                 tier,
                 state_cell_id,
             ):
-                target_cell_id = action_layer.target_cell_by_action_cell.get(action_cell_id)
+                target_cell_id = action_layer.target_cell_by_action_cell.get(
+                    action_cell_id
+                )
                 if target_cell_id is None:
                     continue
                 source = self._state_cell_to_string(state_cell_id)
@@ -217,7 +220,9 @@ class StateCollapserStaticTowerAdapter:
 
     def project_edge(self, tier: int, edge_id: str) -> str:
         if edge_id.startswith("jss:identity:"):
-            projected_source = self.project_vertex(tier, identity_edge_vertex_id(edge_id))
+            projected_source = self.project_vertex(
+                tier, identity_edge_vertex_id(edge_id)
+            )
             return identity_edge_id(projected_source)
         projected_source = self.project_vertex(tier, self.edge_source(tier, edge_id))
         projected_target = self.project_vertex(tier, self.edge_target(tier, edge_id))

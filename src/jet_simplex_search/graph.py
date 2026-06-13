@@ -115,4 +115,3 @@ def payload_for_vertex(graph: GraphInput, vertex_id: str) -> Any:
         if vertex.id == vertex_id:
             return vertex.id if vertex.payload is None else vertex.payload
     raise InvalidGraphError(f"Unknown vertex id: {vertex_id!r}.")
-

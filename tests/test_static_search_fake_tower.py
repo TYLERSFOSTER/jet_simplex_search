@@ -17,4 +17,3 @@ def test_static_search_respects_k() -> None:
     result = run_static_small_object_search(FakeStaticTowerAdapter(), k=0)
 
     assert all(degree == 0 for _tier, degree in result.simplices_by_tier_degree)
-

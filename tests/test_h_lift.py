@@ -220,7 +220,9 @@ def test_h_lift_diagnostics_separate_positive_and_total_counts() -> None:
     assert diagnostics.total_h_lift_count_by_degree[1] == 2
 
 
-def _search_h(graph: GraphInput, *, k: int) -> tuple[SkeletonizationResult, SimplexSearchResult]:
+def _search_h(
+    graph: GraphInput, *, k: int
+) -> tuple[SkeletonizationResult, SimplexSearchResult]:
     skeleton = skeletonize_graph(graph)
     normalized = normalize_graph(skeleton.skeleton_graph)
     simplices_by_degree = enumerate_direct_simplices(normalized, tier=0, k=k)

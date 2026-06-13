@@ -44,7 +44,9 @@ class SkeletonLoopFiber:
     original_loop_edge_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "original_loop_edge_ids", tuple(self.original_loop_edge_ids))
+        object.__setattr__(
+            self, "original_loop_edge_ids", tuple(self.original_loop_edge_ids)
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -104,7 +106,9 @@ class SkeletonizationResult:
             "edge_fibers_by_skeleton_edge_id",
             dict(self.edge_fibers_by_skeleton_edge_id),
         )
-        object.__setattr__(self, "loop_fibers_by_vertex", dict(self.loop_fibers_by_vertex))
+        object.__setattr__(
+            self, "loop_fibers_by_vertex", dict(self.loop_fibers_by_vertex)
+        )
         object.__setattr__(
             self,
             "skeleton_edge_id_by_pair",
@@ -205,8 +209,7 @@ def skeletonize_graph(
     input_non_loop_count = sum(len(edges) for edges in non_loop_groups.values())
     non_loop_fiber_sizes = [len(edges) for edges in non_loop_groups.values()]
     loop_fiber_sizes = [
-        len(fiber.original_loop_edge_ids)
-        for fiber in loop_fibers_by_vertex.values()
+        len(fiber.original_loop_edge_ids) for fiber in loop_fibers_by_vertex.values()
     ]
     diagnostics = SkeletonizationDiagnostics(
         input_vertex_count=len(vertices),
@@ -214,7 +217,8 @@ def skeletonize_graph(
         input_loop_edge_count=input_loop_count,
         input_non_loop_edge_count=input_non_loop_count,
         skeleton_non_loop_edge_count=len(skeleton_edges),
-        collapsed_parallel_non_loop_edge_count=input_non_loop_count - len(skeleton_edges),
+        collapsed_parallel_non_loop_edge_count=input_non_loop_count
+        - len(skeleton_edges),
         collapsed_loop_edge_count=input_loop_count,
         vertices_with_original_loops=sum(1 for size in loop_fiber_sizes if size > 0),
         maximum_non_loop_fiber_size=max(non_loop_fiber_sizes, default=0),

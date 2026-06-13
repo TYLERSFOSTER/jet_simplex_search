@@ -43,7 +43,9 @@ def test_final_downstairs_edge_selects_upstairs_edge_fiber() -> None:
         for simplex in lifted_zero.simplices_by_degree[0]
         if simplex.vertices == ("a",)
     )
-    cd_simplex = next(simplex for simplex in downstairs[1] if simplex.vertices == ("C", "D"))
+    cd_simplex = next(
+        simplex for simplex in downstairs[1] if simplex.vertices == ("C", "D")
+    )
 
     lifted = lift_downstairs_extension(
         adapter=adapter,
@@ -56,7 +58,9 @@ def test_final_downstairs_edge_selects_upstairs_edge_fiber() -> None:
     assert {simplex.vertices for simplex in lifted} == {("a", "d")}
 
 
-def test_non_degenerate_upstairs_edge_over_degenerate_downstairs_edge_is_emitted() -> None:
+def test_non_degenerate_upstairs_edge_over_degenerate_downstairs_edge_is_emitted() -> (
+    None
+):
     adapter = FakeStaticTowerAdapter()
     downstairs = enumerate_direct_simplices(
         normalized_graph_for_tier(adapter, 1),
@@ -80,8 +84,7 @@ def test_non_degenerate_upstairs_edge_over_degenerate_downstairs_edge_is_emitted
         if fiber.downstairs_simplex_id == downstairs_degenerate.id
     )
     lifted_simplices = {
-        simplex.id: simplex
-        for simplex in lifted.simplices_by_degree[1]
+        simplex.id: simplex for simplex in lifted.simplices_by_degree[1]
     }
 
     assert any(
@@ -109,17 +112,17 @@ def test_candidate_must_be_in_frontier_and_edge_fiber() -> None:
         fiber
         for fiber in lifted.simplex_fibers
         if any(
-            simplex.vertices == ("C", "D")
-            and simplex.id == fiber.downstairs_simplex_id
+            simplex.vertices == ("C", "D") and simplex.id == fiber.downstairs_simplex_id
             for simplex in downstairs[1]
         )
     )
     lifted_edges = {
-        simplex.id: simplex.vertices
-        for simplex in lifted.simplices_by_degree[1]
+        simplex.id: simplex.vertices for simplex in lifted.simplices_by_degree[1]
     }
 
-    assert {lifted_edges[simplex_id] for simplex_id in cd_fiber.upstairs_simplex_ids} == {
+    assert {
+        lifted_edges[simplex_id] for simplex_id in cd_fiber.upstairs_simplex_ids
+    } == {
         ("a", "d"),
         ("b", "d"),
     }

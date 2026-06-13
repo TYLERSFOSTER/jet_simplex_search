@@ -50,10 +50,7 @@ def _edge_endpoints_by_id(
     tier: int,
 ) -> dict[str, tuple[str, str]]:
     graph = normalized_graph_for_tier(adapter, tier)
-    return {
-        edge.id: (edge.source, edge.target)
-        for edge in graph.edges
-    }
+    return {edge.id: (edge.source, edge.target) for edge in graph.edges}
 
 
 def _assert_witness_edges_match_vertices(
@@ -62,8 +59,7 @@ def _assert_witness_edges_match_vertices(
     result: SimplexSearchResult,
 ) -> None:
     endpoint_cache = {
-        tier: _edge_endpoints_by_id(adapter, tier)
-        for tier in adapter.tiers()
+        tier: _edge_endpoints_by_id(adapter, tier) for tier in adapter.tiers()
     }
     for simplex in _all_simplices(result):
         endpoints_by_id = endpoint_cache[simplex.tier]

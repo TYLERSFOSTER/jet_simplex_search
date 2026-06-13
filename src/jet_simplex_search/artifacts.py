@@ -39,7 +39,9 @@ def write_search_artifact(
     """Write a search artifact and return the manifest/source path."""
 
     if config.include_expanded_h_lift_witnesses:
-        raise ArtifactWriteError("Expanded H-lift witness artifacts are not implemented.")
+        raise ArtifactWriteError(
+            "Expanded H-lift witness artifacts are not implemented."
+        )
     result = _as_search_result(result)
     try:
         config.output_dir.mkdir(parents=True, exist_ok=True)
@@ -64,12 +66,16 @@ def _write_manifest_tables(result: SearchResult, config: ArtifactConfig) -> Path
         return _write_combined_manifest_tables(result, config)
     result = _as_simplex_search_result(result)
     simplex_records = [
-        _simplex_to_dict(simplex, include_frontier_members=config.include_frontier_members)
+        _simplex_to_dict(
+            simplex, include_frontier_members=config.include_frontier_members
+        )
         for _key, records in sorted(result.simplices_by_tier_degree.items())
         for simplex in records
     ]
     simplex_fibers = [
-        _simplex_fiber_to_dict(record, include_members=config.include_full_fiber_members)
+        _simplex_fiber_to_dict(
+            record, include_members=config.include_full_fiber_members
+        )
         for record in result.fibers
     ]
     edge_fibers = [
@@ -156,23 +162,31 @@ def _simplex_search_payload(
     return {
         "manifest": _manifest_payload(result, config),
         "simplex_records": [
-            _simplex_to_dict(simplex, include_frontier_members=config.include_frontier_members)
+            _simplex_to_dict(
+                simplex, include_frontier_members=config.include_frontier_members
+            )
             for _key, records in sorted(result.simplices_by_tier_degree.items())
             for simplex in records
         ],
         "simplex_fibers": [
-            _simplex_fiber_to_dict(record, include_members=config.include_full_fiber_members)
+            _simplex_fiber_to_dict(
+                record, include_members=config.include_full_fiber_members
+            )
             for record in result.fibers
         ],
         "edge_fibers": [
-            _edge_fiber_to_dict(record, include_members=config.include_full_fiber_members)
+            _edge_fiber_to_dict(
+                record, include_members=config.include_full_fiber_members
+            )
             for record in result.edge_fibers
         ],
         "diagnostics": _diagnostics_payload(result),
     }
 
 
-def _manifest_payload(result: SearchResult, config: ArtifactConfig) -> dict[str, object]:
+def _manifest_payload(
+    result: SearchResult, config: ArtifactConfig
+) -> dict[str, object]:
     if isinstance(result, SearchWithHLiftsResult):
         search_result = result.skeleton_search
         result_kind = "skeleton_search_with_h_lifts"
@@ -277,12 +291,16 @@ def _write_combined_manifest_tables(
 ) -> Path:
     skeleton_search = _as_simplex_search_result(result.skeleton_search)
     simplex_records = [
-        _simplex_to_dict(simplex, include_frontier_members=config.include_frontier_members)
+        _simplex_to_dict(
+            simplex, include_frontier_members=config.include_frontier_members
+        )
         for _key, records in sorted(skeleton_search.simplices_by_tier_degree.items())
         for simplex in records
     ]
     simplex_fibers = [
-        _simplex_fiber_to_dict(record, include_members=config.include_full_fiber_members)
+        _simplex_fiber_to_dict(
+            record, include_members=config.include_full_fiber_members
+        )
         for record in skeleton_search.fibers
     ]
     edge_fibers = [
@@ -290,11 +308,15 @@ def _write_combined_manifest_tables(
         for record in skeleton_search.edge_fibers
     ]
     skeleton_edge_fibers = [
-        _skeleton_edge_fiber_to_dict(fiber, include_members=config.include_h_fiber_members)
+        _skeleton_edge_fiber_to_dict(
+            fiber, include_members=config.include_h_fiber_members
+        )
         for _key, fiber in sorted(result.skeletonization.edge_fibers_by_pair.items())
     ]
     skeleton_loop_fibers = [
-        _skeleton_loop_fiber_to_dict(fiber, include_members=config.include_h_fiber_members)
+        _skeleton_loop_fiber_to_dict(
+            fiber, include_members=config.include_h_fiber_members
+        )
         for _key, fiber in sorted(result.skeletonization.loop_fibers_by_vertex.items())
     ]
     h_lift_records = [
@@ -483,10 +505,14 @@ def _combined_diagnostics_payload(result: SearchWithHLiftsResult) -> dict[str, o
 def _as_search_result(result: object) -> SearchResult:
     if isinstance(result, (SimplexSearchResult, SearchWithHLiftsResult)):
         return result
-    raise ArtifactWriteError(f"Unsupported artifact result type {type(result).__name__!r}.")
+    raise ArtifactWriteError(
+        f"Unsupported artifact result type {type(result).__name__!r}."
+    )
 
 
 def _as_simplex_search_result(result: object) -> SimplexSearchResult:
     if isinstance(result, SimplexSearchResult):
         return result
-    raise ArtifactWriteError(f"Unsupported artifact result type {type(result).__name__!r}.")
+    raise ArtifactWriteError(
+        f"Unsupported artifact result type {type(result).__name__!r}."
+    )

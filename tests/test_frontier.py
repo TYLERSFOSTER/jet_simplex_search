@@ -23,9 +23,9 @@ def test_extend_frontier_intersects_sets() -> None:
 def test_repeated_vertex_leaves_frontier_unchanged() -> None:
     graph = normalize_graph(GraphInput(vertices=(InputVertex("s"),)))
 
-    assert extend_frontier(initial_frontier(graph, "s"), initial_frontier(graph, "s")) == (
-        initial_frontier(graph, "s")
-    )
+    assert extend_frontier(
+        initial_frontier(graph, "s"), initial_frontier(graph, "s")
+    ) == (initial_frontier(graph, "s"))
 
 
 def test_extension_matches_full_recomputation() -> None:
@@ -40,7 +40,9 @@ def test_extension_matches_full_recomputation() -> None:
         )
     )
 
-    ab_frontier = extend_frontier(initial_frontier(graph, "a"), initial_frontier(graph, "b"))
+    ab_frontier = extend_frontier(
+        initial_frontier(graph, "a"), initial_frontier(graph, "b")
+    )
     abc_frontier = extend_frontier(ab_frontier, initial_frontier(graph, "c"))
     full = (
         initial_frontier(graph, "a")
@@ -49,4 +51,3 @@ def test_extension_matches_full_recomputation() -> None:
     )
 
     assert abc_frontier == full
-

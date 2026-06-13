@@ -6,7 +6,12 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 
 from jet_simplex_search.errors import CleanTowerConstructionError
-from jet_simplex_search.graph import GraphInput, InputEdge, InputVertex, validate_graph_input
+from jet_simplex_search.graph import (
+    GraphInput,
+    InputEdge,
+    InputVertex,
+    validate_graph_input,
+)
 from jet_simplex_search.ids import identity_edge_id, tier_simple_edge_id
 
 
@@ -19,7 +24,9 @@ class CleanTowerConfig:
 
     def __post_init__(self) -> None:
         if self.max_tiers is not None and self.max_tiers <= 0:
-            raise CleanTowerConstructionError("CleanTowerConfig.max_tiers must be positive.")
+            raise CleanTowerConstructionError(
+                "CleanTowerConfig.max_tiers must be positive."
+            )
 
 
 @dataclass(frozen=True, slots=True)
@@ -39,10 +46,7 @@ class CleanTierProjection:
         object.__setattr__(
             self,
             "edge_fiber_targets",
-            {
-                key: frozenset(value)
-                for key, value in self.edge_fiber_targets.items()
-            },
+            {key: frozenset(value) for key, value in self.edge_fiber_targets.items()},
         )
         object.__setattr__(
             self,
@@ -65,7 +69,9 @@ class CleanTowerDiagnostics:
     stopped_because_singleton: bool
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "vertex_count_by_tier", dict(self.vertex_count_by_tier))
+        object.__setattr__(
+            self, "vertex_count_by_tier", dict(self.vertex_count_by_tier)
+        )
         object.__setattr__(self, "edge_count_by_tier", dict(self.edge_count_by_tier))
         object.__setattr__(
             self,
@@ -159,7 +165,9 @@ class CleanStaticTowerAdapter:
         return 0
 
     def tier_vertices(self, tier: int) -> tuple[str, ...]:
-        return tuple(vertex.id for vertex in self.clean_tower.tier_graphs[tier].vertices)
+        return tuple(
+            vertex.id for vertex in self.clean_tower.tier_graphs[tier].vertices
+        )
 
     def tier_edges(self, tier: int) -> tuple[str, ...]:
         return tuple(edge.id for edge in self.clean_tower.tier_graphs[tier].edges)
@@ -185,7 +193,9 @@ class CleanStaticTowerAdapter:
         if edge_id.startswith("jss:identity:"):
             from jet_simplex_search.ids import identity_edge_vertex_id
 
-            projected_vertex = self.project_vertex(tier, identity_edge_vertex_id(edge_id))
+            projected_vertex = self.project_vertex(
+                tier, identity_edge_vertex_id(edge_id)
+            )
             return identity_edge_id(projected_vertex)
         return self.clean_tower.projections[tier].edge_projection[edge_id]
 
@@ -202,7 +212,9 @@ class CleanStaticTowerAdapter:
         )
 
     def tier0_vertex_id_to_input_vertex_id(self) -> dict[str, str]:
-        return {vertex.id: vertex.id for vertex in self.clean_tower.tier_graphs[0].vertices}
+        return {
+            vertex.id: vertex.id for vertex in self.clean_tower.tier_graphs[0].vertices
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -264,13 +276,18 @@ def build_clean_static_tower(
                 if config.stop_at_singleton and len(current_graph.vertices) <= 1:
                     stopped_because_singleton = True
                     break
-                if config.max_tiers is not None and len(tier_graphs) >= config.max_tiers:
+                if (
+                    config.max_tiers is not None
+                    and len(tier_graphs) >= config.max_tiers
+                ):
                     break
                 try:
                     block_id = next(block_cursor)
                 except StopIteration:
                     break
-                current_objects = _current_tier_objects(current_graph, tier=len(tier_graphs) - 1)
+                current_objects = _current_tier_objects(
+                    current_graph, tier=len(tier_graphs) - 1
+                )
                 if not _block_has_edges(schema, block_id, current_objects):
                     skipped_empty_block_count += 1
                     continue
@@ -297,9 +314,14 @@ def build_clean_static_tower(
                 if config.stop_at_singleton and len(current_graph.vertices) <= 1:
                     stopped_because_singleton = True
                     break
-                if config.max_tiers is not None and len(tier_graphs) >= config.max_tiers:
+                if (
+                    config.max_tiers is not None
+                    and len(tier_graphs) >= config.max_tiers
+                ):
                     break
-                current_objects = _current_tier_objects(current_graph, tier=len(tier_graphs) - 1)
+                current_objects = _current_tier_objects(
+                    current_graph, tier=len(tier_graphs) - 1
+                )
                 blocks = _assigned_blocks(schema, current_objects)
                 if not blocks:
                     break
@@ -328,8 +350,7 @@ def build_clean_static_tower(
             for tier, tier_graph in enumerate(tier_graphs)
         },
         edge_count_by_tier={
-            tier: len(tier_graph.edges)
-            for tier, tier_graph in enumerate(tier_graphs)
+            tier: len(tier_graph.edges) for tier, tier_graph in enumerate(tier_graphs)
         },
         collapsed_loop_count_by_step=collapsed_loop_count_by_step,
         collapsed_parallel_edge_count_by_step=collapsed_parallel_count_by_step,
@@ -361,7 +382,9 @@ def _realize_clean_quotient_step(
         schema=_SingleBlockContractionSchema(schema, block_id),
     )
     if len(tower.state_layers) < 2:  # type: ignore[attr-defined]
-        raise CleanTowerConstructionError("One-block quotient tower did not create a quotient tier.")
+        raise CleanTowerConstructionError(
+            "One-block quotient tower did not create a quotient tier."
+        )
 
     downstairs_tier = upstairs_tier + 1
     downstream_layer = tower.state_layers[1]  # type: ignore[attr-defined]
@@ -384,10 +407,7 @@ def _realize_clean_quotient_step(
         downstairs_tier=downstairs_tier,
     )
     downstream_graph = GraphInput(
-        vertices=tuple(
-            InputVertex(vertex_id)
-            for vertex_id in sorted(vertex_members)
-        ),
+        vertices=tuple(InputVertex(vertex_id) for vertex_id in sorted(vertex_members)),
         edges=downstream_edges,
     )
     _assert_clean_graph(downstream_graph)
@@ -446,7 +466,9 @@ def _current_tier_objects(graph: GraphInput, *, tier: int) -> _CurrentTierObject
     )
 
 
-def _assigned_blocks(schema: object, current_objects: _CurrentTierObjects) -> tuple[object, ...]:
+def _assigned_blocks(
+    schema: object, current_objects: _CurrentTierObjects
+) -> tuple[object, ...]:
     assigned: dict[object, None] = {}
     for edge_id in current_objects.registry.edge_ids:  # type: ignore[attr-defined]
         block_id = schema.assign_edge(edge_id, current_objects.registry)
@@ -539,7 +561,9 @@ def _realize_edges(
                 [],
             ).append(edge)
         edge_projection[edge.id] = projected_edge_id
-        edge_fiber_targets.setdefault((projected_edge_id, edge.source), set()).add(edge.target)
+        edge_fiber_targets.setdefault((projected_edge_id, edge.source), set()).add(
+            edge.target
+        )
 
     downstream_edges: list[InputEdge] = []
     collapsed_parallel_edge_count = 0
@@ -553,13 +577,14 @@ def _realize_edges(
             )
         edge_id = tier_simple_edge_id(downstairs_tier, source, target)
         labels = next(iter(label_tuples))
-        downstream_edges.append(InputEdge(id=edge_id, source=source, target=target, labels=labels))
+        downstream_edges.append(
+            InputEdge(id=edge_id, source=source, target=target, labels=labels)
+        )
         collapsed_parallel_edge_count += max(0, len(edges) - 1)
         maximum_edge_fiber_size = max(maximum_edge_fiber_size, len(edges))
 
     frozen_edge_fiber_targets = {
-        key: frozenset(value)
-        for key, value in edge_fiber_targets.items()
+        key: frozenset(value) for key, value in edge_fiber_targets.items()
     }
     return (
         tuple(downstream_edges),
@@ -576,7 +601,9 @@ def _assert_clean_graph(graph: GraphInput) -> None:
     seen_pairs: set[tuple[str, str]] = set()
     for edge in graph.edges:
         if edge.source == edge.target:
-            raise CleanTowerConstructionError("Clean tower graphs must not store loops.")
+            raise CleanTowerConstructionError(
+                "Clean tower graphs must not store loops."
+            )
         pair = (edge.source, edge.target)
         if pair in seen_pairs:
             raise CleanTowerConstructionError(

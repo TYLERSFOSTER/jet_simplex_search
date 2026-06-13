@@ -50,4 +50,3 @@ def face_edge_witnesses_for_extension(
             )
         )
     return tuple(witnesses)
-

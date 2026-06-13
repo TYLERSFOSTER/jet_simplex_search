@@ -23,7 +23,9 @@ class FaceEdgeWitness:
     def __post_init__(self) -> None:
         object.__setattr__(self, "edge_ids", tuple(self.edge_ids))
         if self.source_index >= self.target_index:
-            raise SimplexInvariantError("FaceEdgeWitness requires source_index < target_index.")
+            raise SimplexInvariantError(
+                "FaceEdgeWitness requires source_index < target_index."
+            )
         if not self.edge_ids:
             raise SimplexInvariantError("FaceEdgeWitness.edge_ids must be nonempty.")
 
@@ -56,15 +58,23 @@ class SimplexRecord:
         if not self.vertices:
             raise SimplexInvariantError("SimplexRecord.vertices must be nonempty.")
         if self.initial_vertex != self.vertices[0]:
-            raise SimplexInvariantError("Simplex initial_vertex must match vertices[0].")
+            raise SimplexInvariantError(
+                "Simplex initial_vertex must match vertices[0]."
+            )
         if self.target_vertex != self.vertices[-1]:
-            raise SimplexInvariantError("Simplex target_vertex must match vertices[-1].")
+            raise SimplexInvariantError(
+                "Simplex target_vertex must match vertices[-1]."
+            )
         expected_degenerate = len(set(self.vertices)) < len(self.vertices)
         if self.is_degenerate != expected_degenerate:
-            raise SimplexInvariantError("Simplex is_degenerate flag does not match vertices.")
+            raise SimplexInvariantError(
+                "Simplex is_degenerate flag does not match vertices."
+            )
         for witness in self.face_edge_witnesses:
             if witness.target_index >= len(self.vertices):
-                raise SimplexInvariantError("FaceEdgeWitness target index is out of range.")
+                raise SimplexInvariantError(
+                    "FaceEdgeWitness target index is out of range."
+                )
 
 
 @dataclass(frozen=True, slots=True)
@@ -76,7 +86,9 @@ class SimplexFiberRecord:
     upstairs_simplex_ids: tuple[str, ...]
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "upstairs_simplex_ids", tuple(self.upstairs_simplex_ids))
+        object.__setattr__(
+            self, "upstairs_simplex_ids", tuple(self.upstairs_simplex_ids)
+        )
 
 
 @dataclass(frozen=True, slots=True)

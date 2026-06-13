@@ -32,7 +32,9 @@ def test_state_collapser_adapter_builds_static_partition_tower() -> None:
     assert adapter.tier_edges(0)
 
 
-def test_state_collapser_adapter_projects_internal_edge_to_downstairs_identity() -> None:
+def test_state_collapser_adapter_projects_internal_edge_to_downstairs_identity() -> (
+    None
+):
     adapter = StateCollapserStaticTowerAdapter.from_graph(
         _contracting_graph(),
         schema=LabelBlockSchema.from_labels(("collapse",)),
@@ -44,7 +46,9 @@ def test_state_collapser_adapter_projects_internal_edge_to_downstairs_identity()
     assert projected.startswith("jss:identity:")
 
 
-def test_state_collapser_adapter_edge_fiber_includes_nonidentity_over_identity() -> None:
+def test_state_collapser_adapter_edge_fiber_includes_nonidentity_over_identity() -> (
+    None
+):
     adapter = StateCollapserStaticTowerAdapter.from_graph(
         _contracting_graph(),
         schema=LabelBlockSchema.from_labels(("collapse",)),

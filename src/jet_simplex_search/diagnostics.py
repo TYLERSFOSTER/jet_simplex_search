@@ -102,4 +102,3 @@ def _tier_degree_key(key: tuple[int, int]) -> str:
 
 def _mapping_to_dict(mapping: Mapping[tuple[int, int], int]) -> dict[str, int]:
     return {_tier_degree_key(key): value for key, value in sorted(mapping.items())}
-

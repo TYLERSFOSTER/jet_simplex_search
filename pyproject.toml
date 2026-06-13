@@ -5,14 +5,23 @@ description = "Quotient-tower accelerated search for simplices in sparse graphs.
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 license = { file = "LICENSE" }
+keywords = [
+  "simplicial-complexes",
+  "directed-graphs",
+  "quotient-towers",
+  "graph-algorithms",
+  "state-collapser",
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Topic :: Scientific/Engineering :: Mathematics",
+  "Typing :: Typed",
 ]
 dependencies = [
   "state-collapser @ git+https://github.com/TYLERSFOSTER/state_collapser.git@v0.7.2",
@@ -22,6 +31,7 @@ dependencies = [
 Homepage = "https://github.com/TYLERSFOSTER/jet_simplex_search"
 Repository = "https://github.com/TYLERSFOSTER/jet_simplex_search"
 Issues = "https://github.com/TYLERSFOSTER/jet_simplex_search/issues"
+Source = "https://github.com/TYLERSFOSTER/jet_simplex_search"
 
 [dependency-groups]
 dev = [

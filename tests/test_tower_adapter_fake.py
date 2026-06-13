@@ -26,4 +26,3 @@ def test_normalized_graph_for_tier_adds_identities() -> None:
 
     assert graph.edge_lookup[("a", "a")] == (identity_edge_id("a"),)
     assert graph.edge_lookup[("a", "b")] == ("ab",)
-
