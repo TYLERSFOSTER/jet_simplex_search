@@ -95,9 +95,6 @@ class StateCollapserStaticTowerAdapter:
     base_edge_by_normalized_id: dict[str, object]
     _edge_source_cache: dict[tuple[int, str], str] = field(default_factory=dict)
     _edge_target_cache: dict[tuple[int, str], str] = field(default_factory=dict)
-    _simple_edge_action_ids_cache: dict[tuple[int, str], tuple[str, ...]] = field(
-        default_factory=dict
-    )
     _edge_fiber_targets_cache: dict[tuple[int, str, str], frozenset[str]] = field(
         default_factory=dict
     )
@@ -188,13 +185,10 @@ class StateCollapserStaticTowerAdapter:
                     self._action_cell_to_edge_id(action_cell_id)
                 )
         edge_ids: list[str] = []
-        for (source, target), action_edge_ids in sorted(action_edge_ids_by_pair.items()):
+        for source, target in sorted(action_edge_ids_by_pair):
             edge_id = tier_simple_edge_id(tier, source, target)
             self._edge_source_cache[(tier, edge_id)] = source
             self._edge_target_cache[(tier, edge_id)] = target
-            self._simple_edge_action_ids_cache[(tier, edge_id)] = tuple(
-                sorted(action_edge_ids)
-            )
             edge_ids.append(edge_id)
         return tuple(sorted(edge_ids))
 
@@ -336,12 +330,3 @@ class StateCollapserStaticTowerAdapter:
             action_cell_id.tier,
             action_cell_id.ordinal,
         )
-
-    @staticmethod
-    def _edge_id_to_action_cell(edge_id: str) -> object:
-        from state_collapser.tower.partition.ids import ActionCellId
-
-        prefix, tier, ordinal = edge_id.split(":")
-        if prefix != "action":
-            raise KeyError(f"Not an action-cell edge id: {edge_id!r}.")
-        return ActionCellId(tier=int(tier), ordinal=int(ordinal))

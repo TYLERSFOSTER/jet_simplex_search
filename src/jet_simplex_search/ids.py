@@ -43,12 +43,6 @@ def simplex_id(tier: int, degree: int, vertices: tuple[str, ...]) -> str:
     return f"jss:simplex:t{tier}:d{degree}:v[{escaped_vertices}]"
 
 
-def fiber_id(downstairs_simplex_id: str, upstairs_tier: int) -> str:
-    """Return a deterministic simplex-fiber id."""
-
-    return f"jss:fiber:t{upstairs_tier}:over:{_escape(downstairs_simplex_id)}"
-
-
 def h_lift_id(simplex_id: str) -> str:
     """Return the canonical H-lift record id for a skeleton simplex id."""
 

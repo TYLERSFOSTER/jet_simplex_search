@@ -11,10 +11,11 @@
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](tests)
+[![Lint](https://img.shields.io/badge/lint-ruff-46a2f1.svg)](https://docs.astral.sh/ruff/)
 [![Status](https://img.shields.io/badge/status-pre--release-orange.svg)](#release-status)
 [![Package Manager](https://img.shields.io/badge/package%20manager-uv-6f42c1.svg)](https://docs.astral.sh/uv/)
 
-`jet_simplex_search` is an implementation of one of the central algorithms developed by Abdullah N. Malik in his work on simplicial graph ML. It is a Python package for finding directed simplices in
+`jet_simplex_search` is an implementation of one of the central algorithms developed by [Abdullah N. Malik](https://abdullahnaeemmalik.github.io/) in [*his work on simplicial graph ML*](https://repository.lib.fsu.edu/islandora/object/fsu:927979). It is a Python package for finding directed simplices in
 sparse graphs. It first skeletonizes an input graph `H` with loops or parallel
 edges to a simple-reflexive search graph `G`, emits degenerate simplices as
 first-class records, and uses static quotient towers from
@@ -22,7 +23,6 @@ first-class records, and uses static quotient towers from
 higher-tier search to fibers over known downstairs simplices. Tier-0 skeleton
 simplices also receive compressed H-lift counts, so original loops and parallel
 edges in `H` remain visible without polluting tower search.
-
 <p align="center">
   <picture>
     <source srcset="assets/images/how_dark.svg" media="(prefers-color-scheme: dark)">
@@ -33,11 +33,12 @@ edges in `H` remain visible without polluting tower search.
 
 <table align="center">
   <tr>
-    <td width="520" align="center">
-      <sub><em>[...]</em></sub>
+    <td width="350" align="center">
+      <sub><em>The speed-up provided by `jet_simplex_search` is acheived by using a contraction hierarchy to reduce the search space.</em></sub>
     </td>
   </tr>
 </table>
+
 The package is currently pre-release software. The core implementation is in
 place, but public packaging, CI, and release hygiene are still being prepared.
 
@@ -52,6 +53,21 @@ must exist in the skeleton. For example, a path
 Degenerate simplices are not collapsed away. Words such as `(a, a, b)` and
 `(a, b, b)` are valid degree-2 simplices over the edge `a -> b`, and they
 remain distinct records with their full arity.
+<p align="center">
+  <picture>
+    <source srcset="assets/images/degens_dark.svg" media="(prefers-color-scheme: dark)">
+    <source srcset="assets/images/degens_light.svg" media="(prefers-color-scheme: light)">
+    <img src="assets/images/degens_light.svg" alt="degens" width="250">
+  </picture>
+</p>
+
+<table align="center">
+  <tr>
+    <td width="350" align="center">
+      <sub><em>The 4 distinct degenerate 2-simplices, a.k.a. oriented triangles, that lie on a directed edge between two loops.</em></sub>
+    </td>
+  </tr>
+</table>
 
 The tower search is organized so that lifting does not enumerate arbitrary
 upstairs candidates and filter afterward. Instead, each lift is indexed by a
@@ -79,21 +95,18 @@ Parallel H edges produce distinct lifted H-simplices through product counts.
 
 ## Installation
 
-This repository currently expects a sibling checkout of `state_collapser` while
-public packaging is being prepared:
+This package is currently a GitHub source pre-release. For a local checkout:
 
 ```bash
-git clone https://github.com/TYLERSFOSTER/state_collapser.git
 git clone https://github.com/TYLERSFOSTER/jet_simplex_search.git
 cd jet_simplex_search
 uv sync
 ```
 
-The local dependency is recorded in `pyproject.toml` as:
+`state_collapser` is pulled from its GitHub release tag by `pyproject.toml`:
 
 ```toml
-[tool.uv.sources]
-state-collapser = { path = "../state_collapser", editable = true }
+"state-collapser @ git+https://github.com/TYLERSFOSTER/state_collapser.git@v0.7.2"
 ```
 
 ## Quick Start
@@ -208,6 +221,12 @@ Build the Python package locally:
 uv build
 ```
 
+Run Ruff:
+
+```bash
+uv run ruff check .
+```
+
 ## Release Status
 
 Current status: pre-release.
@@ -226,18 +245,22 @@ Implemented and locally tested:
 Still pending before public release:
 
 - CI workflow;
-- public dependency strategy for `state_collapser`;
 - release hygiene automation;
-- package classifiers and project URLs;
 - changelog or release notes;
 - final source distribution and wheel verification.
 
-Not currently implemented:
+## Known Limitations
 
-- Kan replacement;
-- expanded H witness assignment artifacts by default;
-- compressed, SQLite, or DuckDB artifact storage;
-- bitset, CSR, GPU, tensor, or multiprocessing acceleration.
+This is a library pre-release, and the current scope is deliberately narrow:
+
+- Kan replacement and horn-filling variants are not implemented.
+- Expanded H witness assignment artifacts are not implemented.
+- The v0.1 label policy requires exact label agreement when parallel H edges or
+  quotient edges collapse.
+- Tower search is static; it does not rebuild the tower during simplex search.
+- There is no bitset, CSR, GPU, tensor, or multiprocessing acceleration yet.
+- `search_simplices` studies graph `H`; lower-level skeleton/tower search is
+  exposed separately as `search_skeleton_simplices`.
 
 ## Attribution
 
@@ -251,4 +274,3 @@ track around that algorithmic content and its `state_collapser` integration.
 - [Package blueprint](docs/design/initial_design/01_002_static_tower_small_object_package_blueprint.md)
 - [Implementation workplan](docs/design/initial_design/01_003_static_tower_small_object_implementation_workplan.md)
 - [Implementation log](docs/design/initial_design/01_004_static_tower_small_object_implementation_log.md)
-- [Engineering continuity report](docs/release/engineering_continuity_report.md)

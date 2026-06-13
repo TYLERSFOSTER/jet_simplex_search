@@ -7,12 +7,12 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from jet_simplex_search.errors import InvalidGraphError, SimplexInvariantError
-from jet_simplex_search.graph import GraphInput, InputEdge, InputVertex, validate_graph_input
+from jet_simplex_search.graph import GraphInput, InputEdge, validate_graph_input
 from jet_simplex_search.ids import skeleton_edge_id
 
 
 class SkeletonLabelPolicy(StrEnum):
-    """Supported policies for labels on collapsed parallel H edges."""
+    """Supported v0.1 policies for labels on collapsed parallel H edges."""
 
     REQUIRE_IDENTICAL = "require_identical"
 
@@ -127,7 +127,7 @@ def skeletonize_graph(
     *,
     label_policy: SkeletonLabelPolicy = SkeletonLabelPolicy.REQUIRE_IDENTICAL,
 ) -> SkeletonizationResult:
-    """Collapse arbitrary H to a simple loop-free skeleton graph G."""
+    """Collapse H to a simple G using exact label agreement for parallel edges."""
 
     validate_graph_input(graph)
     if label_policy != SkeletonLabelPolicy.REQUIRE_IDENTICAL:

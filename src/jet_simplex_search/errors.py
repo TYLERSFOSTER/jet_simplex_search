@@ -19,10 +19,13 @@ class TowerAdapterError(JetSimplexSearchError):
     """Raised when a static tower adapter cannot satisfy a required query."""
 
 
+class CleanTowerConstructionError(JetSimplexSearchError):
+    """Raised when a clean quotient tower cannot be constructed."""
+
+
 class SimplexInvariantError(JetSimplexSearchError):
     """Raised when simplex or normalized graph invariants are violated."""
 
 
 class ArtifactWriteError(JetSimplexSearchError):
     """Raised when a search artifact cannot be written."""
-

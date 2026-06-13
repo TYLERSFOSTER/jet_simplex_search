@@ -88,7 +88,7 @@ def test_input_loops_are_stored_as_loop_fibers_not_skeleton_edges() -> None:
     assert result.diagnostics.maximum_loop_fiber_size == 2
 
 
-def test_parallel_edges_with_identical_labels_pass() -> None:
+def test_v01_label_policy_allows_exact_parallel_edge_label_agreement() -> None:
     graph = GraphInput(
         vertices=(InputVertex("a"), InputVertex("b")),
         edges=(
@@ -103,7 +103,7 @@ def test_parallel_edges_with_identical_labels_pass() -> None:
     assert result.edge_fibers_by_pair[("a", "b")].labels == ("x",)
 
 
-def test_parallel_edges_with_different_labels_fail() -> None:
+def test_v01_label_policy_requires_exact_parallel_edge_label_agreement() -> None:
     graph = GraphInput(
         vertices=(InputVertex("a"), InputVertex("b")),
         edges=(

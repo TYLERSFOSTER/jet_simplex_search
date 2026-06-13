@@ -16,6 +16,7 @@ from jet_simplex_search.records import (
     SimplexRecord,
     SimplexSearchResult,
 )
+from jet_simplex_search.results import SearchResult, SearchWithHLiftsResult
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,17 +30,17 @@ class ArtifactConfig:
     include_h_fiber_members: bool = True
     include_h_lift_face_factors: bool = True
     include_expanded_h_lift_witnesses: bool = False
-    max_expanded_h_lift_witnesses: int = 100_000
 
 
 def write_search_artifact(
-    result: object,
+    result: SearchResult,
     config: ArtifactConfig,
 ) -> Path:
     """Write a search artifact and return the manifest/source path."""
 
     if config.include_expanded_h_lift_witnesses:
         raise ArtifactWriteError("Expanded H-lift witness artifacts are not implemented.")
+    result = _as_search_result(result)
     try:
         config.output_dir.mkdir(parents=True, exist_ok=True)
         if config.layout == "single_json":
@@ -51,15 +52,15 @@ def write_search_artifact(
     raise ArtifactWriteError(f"Unknown artifact layout {config.layout!r}.")
 
 
-def _write_single_json(result: object, config: ArtifactConfig) -> Path:
+def _write_single_json(result: SearchResult, config: ArtifactConfig) -> Path:
     path = config.output_dir / "readout_source.json"
     payload = _result_payload(result, config)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
     return path
 
 
-def _write_manifest_tables(result: object, config: ArtifactConfig) -> Path:
-    if _is_combined_result(result):
+def _write_manifest_tables(result: SearchResult, config: ArtifactConfig) -> Path:
+    if isinstance(result, SearchWithHLiftsResult):
         return _write_combined_manifest_tables(result, config)
     result = _as_simplex_search_result(result)
     simplex_records = [
@@ -117,28 +118,35 @@ def _write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:
     )
 
 
-def _result_payload(result: object, config: ArtifactConfig) -> dict[str, object]:
-    if _is_combined_result(result):
-        skeleton_search = result.skeleton_search
-        return {
-            "manifest": _manifest_payload(result, config),
-            "skeletonization": _skeletonization_to_dict(
-                result.skeletonization,
-                include_members=config.include_h_fiber_members,
-            ),
-            "skeleton_search": _simplex_search_payload(skeleton_search, config),
-            "h_lifts": [
-                _h_lift_to_dict(
-                    record,
-                    include_fiber_members=config.include_h_fiber_members,
-                    include_face_factors=config.include_h_lift_face_factors,
-                )
-                for record in result.h_lifts
-            ],
-            "diagnostics": _combined_diagnostics_payload(result),
-        }
+def _result_payload(result: SearchResult, config: ArtifactConfig) -> dict[str, object]:
+    if isinstance(result, SearchWithHLiftsResult):
+        return _combined_result_payload(result, config)
     result = _as_simplex_search_result(result)
     return _simplex_search_payload(result, config)
+
+
+def _combined_result_payload(
+    result: SearchWithHLiftsResult,
+    config: ArtifactConfig,
+) -> dict[str, object]:
+    skeleton_search = result.skeleton_search
+    return {
+        "manifest": _manifest_payload(result, config),
+        "skeletonization": _skeletonization_to_dict(
+            result.skeletonization,
+            include_members=config.include_h_fiber_members,
+        ),
+        "skeleton_search": _simplex_search_payload(skeleton_search, config),
+        "h_lifts": [
+            _h_lift_to_dict(
+                record,
+                include_fiber_members=config.include_h_fiber_members,
+                include_face_factors=config.include_h_lift_face_factors,
+            )
+            for record in result.h_lifts
+        ],
+        "diagnostics": _combined_diagnostics_payload(result),
+    }
 
 
 def _simplex_search_payload(
@@ -164,20 +172,26 @@ def _simplex_search_payload(
     }
 
 
-def _manifest_payload(result: object, config: ArtifactConfig) -> dict[str, object]:
-    search_result = result.skeleton_search if _is_combined_result(result) else result
-    search_result = _as_simplex_search_result(search_result)
+def _manifest_payload(result: SearchResult, config: ArtifactConfig) -> dict[str, object]:
+    if isinstance(result, SearchWithHLiftsResult):
+        search_result = result.skeleton_search
+        result_kind = "skeleton_search_with_h_lifts"
+        schema_version = 2
+    else:
+        search_result = _as_simplex_search_result(result)
+        result_kind = "simplex_search"
+        schema_version = 1
     payload: dict[str, object] = {
-        "schema_version": 2 if _is_combined_result(result) else 1,
+        "schema_version": schema_version,
         "package": "jet-simplex-search",
+        "result_kind": result_kind,
         "k": search_result.k,
         "bottom_tier": search_result.bottom_tier,
         "artifact_layout": config.layout,
         "include_frontier_members": config.include_frontier_members,
         "include_full_fiber_members": config.include_full_fiber_members,
     }
-    if _is_combined_result(result):
-        payload["result_kind"] = "skeleton_search_with_h_lifts"
+    if isinstance(result, SearchWithHLiftsResult):
         payload["include_h_fiber_members"] = config.include_h_fiber_members
         payload["include_h_lift_face_factors"] = config.include_h_lift_face_factors
         payload["include_expanded_h_lift_witnesses"] = (
@@ -257,7 +271,10 @@ def _edge_fiber_to_dict(
     return payload
 
 
-def _write_combined_manifest_tables(result: object, config: ArtifactConfig) -> Path:
+def _write_combined_manifest_tables(
+    result: SearchWithHLiftsResult,
+    config: ArtifactConfig,
+) -> Path:
     skeleton_search = _as_simplex_search_result(result.skeleton_search)
     simplex_records = [
         _simplex_to_dict(simplex, include_frontier_members=config.include_frontier_members)
@@ -455,7 +472,7 @@ def _h_face_factor_to_dict(
     return payload
 
 
-def _combined_diagnostics_payload(result: object) -> dict[str, object]:
+def _combined_diagnostics_payload(result: SearchWithHLiftsResult) -> dict[str, object]:
     return {
         "skeletonization": result.skeletonization.diagnostics.to_dict(),
         "skeleton_search": _diagnostics_payload(result.skeleton_search),
@@ -463,16 +480,10 @@ def _combined_diagnostics_payload(result: object) -> dict[str, object]:
     }
 
 
-def _is_combined_result(result: object) -> bool:
-    return all(
-        hasattr(result, attribute)
-        for attribute in (
-            "skeletonization",
-            "skeleton_search",
-            "h_lifts",
-            "h_lift_diagnostics",
-        )
-    )
+def _as_search_result(result: object) -> SearchResult:
+    if isinstance(result, (SimplexSearchResult, SearchWithHLiftsResult)):
+        return result
+    raise ArtifactWriteError(f"Unsupported artifact result type {type(result).__name__!r}.")
 
 
 def _as_simplex_search_result(result: object) -> SimplexSearchResult:
