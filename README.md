@@ -14,11 +14,26 @@
 [![Status](https://img.shields.io/badge/status-pre--release-orange.svg)](#release-status)
 [![Package Manager](https://img.shields.io/badge/package%20manager-uv-6f42c1.svg)](https://docs.astral.sh/uv/)
 
-`jet_simplex_search` is a Python package for finding directed flag simplices in
+`jet_simplex_search` is an implementation of one of the central algorithms developed by Abdullah N. Malik in his work on simplicial graph ML. It is a Python package for finding directed simplices in
 sparse graphs. It emits degenerate simplices as first-class records and uses
 static quotient towers from [`state_collapser`](https://github.com/TYLERSFOSTER/state_collapser)
 to restrict higher-tier search to fibers over known downstairs simplices.
 
+<p align="center">
+  <picture>
+    <source srcset="assets/images/how_dark.svg" media="(prefers-color-scheme: dark)">
+    <source srcset="assets/images/how_light.svg" media="(prefers-color-scheme: light)">
+    <img src="assets/images/how_light.svg" alt="how" width="420">
+  </picture>
+</p>
+
+<table align="center">
+  <tr>
+    <td width="520" align="center">
+      <sub><em>[...]</em></sub>
+    </td>
+  </tr>
+</table>
 The package is currently pre-release software. The core implementation is in
 place, but public packaging, CI, and release hygiene are still being prepared.
 
