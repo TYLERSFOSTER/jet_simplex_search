@@ -262,11 +262,18 @@ This is a library pre-release, and the current scope is deliberately narrow:
 - `search_simplices` studies graph `H`; lower-level skeleton/tower search is
   exposed separately as `search_skeleton_simplices`.
 
-## Attribution
+## Malik Research Lineage
 
-The quotient-tower simplex search algorithm recorded in the design documents is
-PM Abdul Malik's work and part of his thesis. This package is an implementation
-track around that algorithmic content and its `state_collapser` integration.
+This package implements a small, release-oriented slice of Abdullah N. Malik's
+simplicial graph-search program. Malik's work supplies the mathematical and
+algorithmic origin: directed graphs as 1-skeletons of simplicial data,
+degenerate simplices as first-class records, and quotient-tower lifting as the
+core speed-up for higher simplex search. This repository adds the package
+engineering around `state_collapser`, H-to-G skeletonization, witness artifacts,
+and release-facing tests.
+
+For the detailed provenance assessment, see
+[Malik Work Progeny In Jet Simplex Search](docs/design/malik_lineage/01_001_malik_work_progeny_in_jet_simplex_search.md).
 
 ## Design Spine
 
