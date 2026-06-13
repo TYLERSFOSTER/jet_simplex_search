@@ -15,9 +15,13 @@
 [![Package Manager](https://img.shields.io/badge/package%20manager-uv-6f42c1.svg)](https://docs.astral.sh/uv/)
 
 `jet_simplex_search` is an implementation of one of the central algorithms developed by Abdullah N. Malik in his work on simplicial graph ML. It is a Python package for finding directed simplices in
-sparse graphs. It emits degenerate simplices as first-class records and uses
-static quotient towers from [`state_collapser`](https://github.com/TYLERSFOSTER/state_collapser)
-to restrict higher-tier search to fibers over known downstairs simplices.
+sparse graphs. It first skeletonizes an input graph `H` with loops or parallel
+edges to a simple-reflexive search graph `G`, emits degenerate simplices as
+first-class records, and uses static quotient towers from
+[`state_collapser`](https://github.com/TYLERSFOSTER/state_collapser) to restrict
+higher-tier search to fibers over known downstairs simplices. Tier-0 skeleton
+simplices also receive compressed H-lift counts, so original loops and parallel
+edges in `H` remain visible without polluting tower search.
 
 <p align="center">
   <picture>
@@ -39,9 +43,10 @@ place, but public packaging, CI, and release hygiene are still being prepared.
 
 ## Why This Exists
 
-Given a directed graph `G` and a dimension bound `k`, the package enumerates
-directed simplices through dimension `k`. A simplex is treated as a directed
-flag object: every required face edge must exist. For example, a path
+Given a directed graph `H` and a dimension bound `k`, the package builds a
+simple skeleton `G` and enumerates directed skeleton simplices through dimension
+`k`. A simplex is treated as a directed flag object: every required face edge
+must exist in the skeleton. For example, a path
 `a -> b -> c` is not a 2-simplex unless the face edge `a -> c` also exists.
 
 Degenerate simplices are not collapsed away. Words such as `(a, a, b)` and
@@ -52,17 +57,23 @@ The tower search is organized so that lifting does not enumerate arbitrary
 upstairs candidates and filter afterward. Instead, each lift is indexed by a
 known downstairs simplex and the fiber of its final edge.
 
+After tier-0 skeleton simplices are found, the package computes compressed
+H-lift counts. Degenerate skeleton faces lift to `H` precisely through actual
+loops in `H`; a formal identity in `G` is not counted as an original H loop.
+Parallel H edges produce distinct lifted H-simplices through product counts.
+
 ## Features
 
 - Sparse directed graph input via small immutable records.
-- First-scope loop normalization: input loops are stripped, then one formal
-  identity is added at every vertex.
+- H-to-G skeletonization for input loops and parallel edges.
+- Formal identity search edges for degenerate skeleton addresses.
 - Directed flag simplex enumeration through a user-provided `k`.
 - First-class degenerate simplex records.
 - Cached frontier recurrence:
   `F(sigma) = F(partial_m sigma) cap A(tgt sigma)`.
 - Static tower integration through `state_collapser`.
 - Fiber-addressed lifting across quotient tiers.
+- Compressed H-lift counts for tier-0 skeleton simplices.
 - JSON and JSONL artifact output for downstream inspection.
 - Low-dimensional smoke examples with count arguments.
 
@@ -108,13 +119,15 @@ result = search_simplices(
     k=2,
 )
 
-print(result.diagnostics.simplex_counts_by_tier_degree)
+print(result.skeleton_search.diagnostics.simplex_counts_by_tier_degree)
+print(result.h_lift_diagnostics.total_h_lift_count_by_degree)
 ```
 
 Example output:
 
 ```python
 {(1, 0): 2, (1, 1): 3, (1, 2): 4, (0, 0): 3, (0, 1): 6, (0, 2): 10}
+{0: 3, 1: 3, 2: 1}
 ```
 
 ## Artifact Output
@@ -146,9 +159,13 @@ ArtifactConfig(
 That writes:
 
 - `readout_source.json`
+- `skeleton_edge_fibers.jsonl`
+- `skeleton_loop_fibers.jsonl`
 - `simplex_records.jsonl`
 - `simplex_fibers.jsonl`
 - `edge_fibers.jsonl`
+- `h_lift_records.jsonl`
+- `h_lift_face_factors.jsonl`
 - `diagnostics.json`
 
 ## Smoke Examples
@@ -168,7 +185,7 @@ smoke/smoke_007.md
 ```
 
 These examples cover isolated vertices, paths, transitive triangles, forks,
-diamonds, disconnected components, parallel edges, input-loop stripping, and a
+diamonds, disconnected components, parallel H edges, input-loop H-lifts, and a
 small quotient-tower contraction.
 
 ## Development
@@ -197,6 +214,8 @@ Current status: pre-release.
 
 Implemented and locally tested:
 
+- H-to-G skeletonization;
+- compressed tier-0 H-lift counts;
 - bottom-tier direct enumeration;
 - degenerate simplex records;
 - fake-tower and real-`state_collapser` tower lifting;
@@ -216,8 +235,7 @@ Still pending before public release:
 Not currently implemented:
 
 - Kan replacement;
-- meaningful non-identity input loops;
-- one simplex per multigraph witness choice;
+- expanded H witness assignment artifacts by default;
 - compressed, SQLite, or DuckDB artifact storage;
 - bitset, CSR, GPU, tensor, or multiprocessing acceleration.
 
