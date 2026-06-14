@@ -48,8 +48,9 @@ edges in `H` remain visible without polluting tower search.
   </tr>
 </table>
 
-The package is currently pre-release software. The core implementation is in
-place, but public packaging, CI, and release hygiene are still being prepared.
+The package is currently public GitHub pre-release software. The core
+small-object simplex search implementation is in place; newer completion/search
+mode folders are design tracks, not implemented APIs.
 
 ## Why This Exists
 
@@ -254,7 +255,16 @@ uv run python scripts/release_hygiene.py --repo-root .
 
 ## Release Status
 
-Current status: pre-release.
+Current status: public GitHub library pre-release.
+
+The `v0.1.0` GitHub release is available at:
+
+```text
+https://github.com/TYLERSFOSTER/jet_simplex_search/releases/tag/v0.1.0
+```
+
+Current `main` contains post-`v0.1.0` documentation and discoverability updates,
+including the completion/search mode design scaffold.
 
 Implemented and locally tested:
 
@@ -272,19 +282,21 @@ Implemented and locally tested:
 - GitHub Actions workflow configuration;
 - release notes, security policy, and contribution guide.
 
-Still pending before public release:
+Still pending beyond the current pre-release:
 
-- remote CI pass on GitHub;
-- final source distribution and wheel verification.
-- clean installed-wheel verification.
-- explicit Project Owner approval before any tag, release asset, visibility
-  change, or publication.
+- PyPI publication;
+- benchmark-supported speed-up claims;
+- Kan, weak Kan, cubical, and globular mode implementations;
+- final decision on whether post-`v0.1.0` documentation updates should become a
+  patch release.
 
 ## Known Limitations
 
 This is a library pre-release, and the current scope is deliberately narrow:
 
 - Kan replacement and horn-filling variants are not implemented.
+- Cubical commutativity, globular test-object, weak Kan, and full Kan modes are
+  design tracks only; they do not yet have package APIs.
 - Expanded H witness assignment artifacts are not implemented.
 - The v0.1 label policy requires exact label agreement when parallel H edges or
   quotient edges collapse.
@@ -315,3 +327,13 @@ For the detailed provenance assessment, see
 - [Package blueprint](docs/design/initial_design/01_002_static_tower_small_object_package_blueprint.md)
 - [Implementation workplan](docs/design/initial_design/01_003_static_tower_small_object_implementation_workplan.md)
 - [Implementation log](docs/design/initial_design/01_004_static_tower_small_object_implementation_log.md)
+
+## Completion/Search Mode Design
+
+- [Completion search modes overview](docs/design/completion_search_modes/README.md)
+- [Cofibrant small-object mode](docs/design/completion_search_modes/cofibrant_small_object/README.md)
+- [Weak Kan inner-horn mode](docs/design/completion_search_modes/weak_kan_inner_horn/README.md)
+- [Kan all-horn mode](docs/design/completion_search_modes/kan_all_horn/README.md)
+- [Commutative squares and cubes](docs/design/completion_search_modes/commutative_squares_cubes/README.md)
+- [Cubical Out/In and seam matching discussion](docs/design/completion_search_modes/commutative_squares_cubes/01_001_cubical_out_in_seam_discussion.md)
+- [Globular test objects](docs/design/completion_search_modes/globular_test_objects/README.md)

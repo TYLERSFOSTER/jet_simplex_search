@@ -74,6 +74,19 @@ the project in any particular way.
   for the H-to-G skeleton realization refactor.
 - `docs/design/synthetic_blow_code_revisions/`: design, blueprint, workplan,
   and log for the post-review code revisions.
+- `docs/design/completion_search_modes/`: design area for separating shared
+  graph/tower/fiber machinery from mode-specific completion/search protocols.
+- `docs/design/completion_search_modes/cofibrant_small_object/`: notes for the
+  already implemented small-object mode when protocol refactors require them.
+- `docs/design/completion_search_modes/weak_kan_inner_horn/`: design home for
+  weak Kan / inner-horn completion.
+- `docs/design/completion_search_modes/kan_all_horn/`: design home for full
+  Kan / all-horn completion.
+- `docs/design/completion_search_modes/commutative_squares_cubes/`: design home
+  for cubical commutativity objects, including squares, cubes, and the
+  `Out`/`In` seam-matching discussion.
+- `docs/design/completion_search_modes/globular_test_objects/`: design home for
+  globular-category and globular-test-object completion ideas.
 - `docs/design/malik_lineage/01_001_malik_work_progeny_in_jet_simplex_search.md`:
   detailed provenance assessment connecting this package to Abdullah N.
   Malik's simplicial graph-search work.
@@ -116,6 +129,8 @@ Useful entry points:
   This repository does not implement neural message passing, CinchNET, or
   PTVNN.
 - Kan replacement and horn-filling variants are not implemented here yet.
+- Weak Kan, full Kan, cubical commutativity, and globular test-object folders
+  are design scaffolds only; they are not implemented package modes yet.
 - The current search is static: it uses a fixed tower rather than rebuilding the
   tower during search.
 - This package is a GitHub source pre-release; PyPI publication is not part of
@@ -150,5 +165,5 @@ uv run pytest tests/test_smoke_scripts.py tests/test_smoke_docs.py
   known downstairs simplex fibers, not generated broadly and filtered afterward.
 - Public claims should stay bounded to implemented, tested behavior.
 - Benchmark-superiority claims, Kan replacement claims, neural message-passing
-  claims, and production-readiness claims should not be made from the current
-  repository state.
+  claims, cubical/globular completion claims, and production-readiness claims
+  should not be made from the current repository state.

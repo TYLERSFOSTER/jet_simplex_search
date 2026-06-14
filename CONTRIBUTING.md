@@ -37,6 +37,17 @@ and [`HGraphML`](https://github.com/TYLERSFOSTER/HGraphML): this package handles
 bounded simplex search and quotient lifting; HGraphML is the separate beginning
 of quotient-tower-backed graph message passing.
 
+For design work on future completion/search modes, use:
+
+```text
+docs/design/completion_search_modes
+```
+
+Current subtracks include the existing cofibrant small-object mode, weak Kan
+inner-horn mode, full Kan all-horn mode, cubical commutative square/cube mode,
+and globular test-object mode. Treat these as design tracks until an
+implementation workplan is approved and executed.
+
 ## Pull Requests
 
 Please include:
@@ -46,8 +57,9 @@ Please include:
 - any changed public claims;
 - any changed artifact format;
 - whether the change touches deferred features such as Kan replacement,
-  expanded H witnesses, acceleration backends, or neural message passing.
+  cubical commutativity, globular test objects, expanded H witnesses,
+  acceleration backends, or neural message passing.
 
 Do not claim PyPI publication, production readiness, benchmark-validated
-speed-ups, Kan replacement, or neural message passing unless those claims are
-implemented and verified.
+speed-ups, Kan replacement, cubical/globular completion, or neural message
+passing unless those claims are implemented and verified.
