@@ -8,13 +8,21 @@
 
 # **JET- SIMPLEX - SEARCH**
 
-[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
-[![CI](https://img.shields.io/badge/CI-configured-lightgrey.svg)](.github/workflows/test.yml)
-[![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](tests)
-[![Lint](https://img.shields.io/badge/lint-ruff-46a2f1.svg)](https://docs.astral.sh/ruff/)
-[![Status](https://img.shields.io/badge/status-pre--release-orange.svg)](#release-status)
-[![Package Manager](https://img.shields.io/badge/package%20manager-uv-6f42c1.svg)](https://docs.astral.sh/uv/)
+<p align="left">
+  <a href="https://github.com/TYLERSFOSTER/jet_simplex_search/actions/workflows/test.yml">
+    <img src="https://github.com/TYLERSFOSTER/jet_simplex_search/actions/workflows/test.yml/badge.svg" alt="CI">
+  </a>
+  <img src="https://img.shields.io/badge/python-3.11%20%7C%203.12-blue" alt="Python 3.11 | 3.12">
+  <a href="https://github.com/TYLERSFOSTER/jet_simplex_search/releases">
+    <img src="https://img.shields.io/github/v/release/TYLERSFOSTER/jet_simplex_search?label=release" alt="Release">
+  </a>
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
+  </a>
+  <a href="https://github.com/astral-sh/ruff">
+    <img src="https://img.shields.io/badge/lint-ruff-46aef7" alt="Linted with Ruff">
+  </a>
+</p>
 
 `jet_simplex_search` is an implementation of one of the central algorithms developed by [Abdullah N. Malik](https://abdullahnaeemmalik.github.io/) in [*his work on simplicial graph ML*](https://repository.lib.fsu.edu/islandora/object/fsu:927979). It is a Python package for finding directed simplices in
 sparse graphs. It first skeletonizes an input graph `H` with loops or parallel
