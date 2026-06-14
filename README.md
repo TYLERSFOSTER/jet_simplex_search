@@ -86,9 +86,15 @@ After tier-0 skeleton simplices are found, the package computes compressed
 H-lift counts. Degenerate skeleton faces lift to `H` precisely through actual
 loops in `H`; a formal identity in `G` is not counted as an original H loop.
 Parallel H edges produce distinct lifted H-simplices through product counts.
-$$
-H\xrightarrow{\text{red}}\widetilde{H}=: G^{0}\xrightarrow{q^{0}_{1}}G^{1}\xrightarrow{\text{red}}\widetilde{G}^{1}\xrightarrow{q^{1}_{2}}G^{2}\xrightarrow{\text{red}}\widetilde{G}^{2}\xrightarrow{q^{2}_{3}}\cdots
-$$
+
+```math
+H \xrightarrow{\text{red}} \widetilde{H} := G^{0}
+  \xrightarrow{q^{0}_{1}} G^{1}
+  \xrightarrow{\text{red}} \widetilde{G}^{1}
+  \xrightarrow{q^{1}_{2}} G^{2}
+  \xrightarrow{\text{red}} \widetilde{G}^{2}
+  \xrightarrow{q^{2}_{3}} \cdots
+```
 
 ## Features
 
