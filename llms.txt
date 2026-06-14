@@ -1,0 +1,154 @@
+# jet_simplex_search
+
+`jet_simplex_search` is a pre-release Python package for finding directed
+simplices in sparse graphs. It skeletonizes an input graph `H` with possible
+loops and parallel edges into a simple-reflexive search graph `G`, enumerates
+degenerate simplices as first-class records, and uses static quotient towers
+from `state_collapser` to restrict higher-tier search to fibers over known
+downstairs simplices.
+
+Use this file as a compact routing map for agents, retrieval systems, and
+humans. It is documentation, not a claim that LLMs or search systems will index
+the project in any particular way.
+
+## Start Here
+
+- `README.md`: repository overview, current features, installation, quick
+  start, release status, known limitations, Malik lineage, and design links.
+- `RELEASE_NOTES.md`: `v0.1.0` release notes and release-scope summary.
+- `CONTRIBUTING.md`: contributor workflow, release posture, test commands, and
+  expectations for mathematical claims.
+- `SECURITY.md`: vulnerability-reporting guidance.
+- `pyproject.toml`: package metadata, Python version range, classifiers, and
+  the pinned `state_collapser` Git dependency.
+- `src/jet_simplex_search/`: implementation package.
+- `tests/`: regression, release, smoke, artifact, and integration tests.
+- `smoke/`: low-dimensional examples and count arguments.
+
+## Core Concepts
+
+- `H`: the user input graph, which may contain loops and parallel edges.
+- `G`: the skeletonized search graph used for simplex enumeration.
+- Formal identity edges: search-level identities used to enumerate degenerate
+  skeleton simplices.
+- Degenerate simplex: a simplex with repeated vertices; these are not collapsed
+  to their nondegenerate spine.
+- Directed flag simplex: a tuple whose required directed face edges exist in
+  the skeleton graph.
+- Static quotient tower: a precomputed tower from `state_collapser`; the tower
+  is not rebuilt during simplex search.
+- Fiber-addressed lifting: upstairs search is indexed by known downstairs
+  simplex records and the fiber of the downstairs final edge.
+- H-lift count: compressed tier-0 count of how many original `H` witnesses lift
+  a skeleton simplex.
+
+## Engineer Usage
+
+- `src/jet_simplex_search/api.py`: public entry points, especially
+  `search_simplices` and `search_skeleton_simplices`.
+- `src/jet_simplex_search/graph.py`: immutable input graph records.
+- `src/jet_simplex_search/normalize.py`: H-to-G normalization and skeleton
+  construction.
+- `src/jet_simplex_search/search.py`: bottom-tier enumeration and static tower
+  search orchestration.
+- `src/jet_simplex_search/frontier.py`: cached frontier recurrence for simplex
+  extension.
+- `src/jet_simplex_search/lift.py`: fiber-addressed lifting across tower tiers.
+- `src/jet_simplex_search/h_lift.py`: compressed H-lift counting.
+- `src/jet_simplex_search/artifacts.py`: JSON/JSONL artifact output.
+- `src/jet_simplex_search/diagnostics.py`: summary diagnostics.
+- `src/jet_simplex_search/tower_adapter.py`: adapter boundary to
+  `state_collapser`.
+
+## Design And Provenance
+
+- `docs/design/initial_design/01_001_static_tower_small_object_simplex_search.md`:
+  first design statement for static-tower small-object simplex search.
+- `docs/design/initial_design/01_002_static_tower_small_object_package_blueprint.md`:
+  package blueprint for the initial implementation.
+- `docs/design/initial_design/01_003_static_tower_small_object_implementation_workplan.md`:
+  Phase.Stage.Action implementation workplan for the initial package.
+- `docs/design/initial_design/01_004_static_tower_small_object_implementation_log.md`:
+  implementation log for the initial package.
+- `docs/design/h_to_g_skeleton_refactor/`: design, blueprint, workplan, and log
+  for the H-to-G skeleton realization refactor.
+- `docs/design/synthetic_blow_code_revisions/`: design, blueprint, workplan,
+  and log for the post-review code revisions.
+- `docs/design/malik_lineage/01_001_malik_work_progeny_in_jet_simplex_search.md`:
+  detailed provenance assessment connecting this package to Abdullah N.
+  Malik's simplicial graph-search work.
+- `code_review/`: synthetic review reports and review kit used during package
+  hardening.
+
+## Release And Public Documentation
+
+- `docs/design/release_prep/`: release-preparation plans, updated workplans,
+  and execution logs.
+- `docs/engineer_continuity/`: engineer continuity reports for future
+  maintainers.
+- `.github/workflows/test.yml`: GitHub Actions test workflow.
+- `.github/ISSUE_TEMPLATE/`: issue templates.
+- `.github/pull_request_template.md`: pull request checklist.
+- `scripts/release_hygiene.py`: public-release hygiene scanner.
+
+## Smoke Examples
+
+The `smoke/` directory contains small examples through dimension `4`. Each
+`smoke/smoke_*.py` script has a matching `smoke/smoke_*.md` explanation of why
+the output table is correct or what behavior it exercises.
+
+Useful entry points:
+
+- `smoke/simplex_table.py`: shared smoke-script utility.
+- `smoke/smoke_001.py` and `smoke/smoke_001.md`: first public table example.
+- `smoke/smoke_002.py` and `smoke/smoke_002.md`: tier-0 count argument.
+- `tests/test_smoke_scripts.py`: smoke stdout snapshot regression.
+- `tests/test_smoke_docs.py`: smoke documentation coverage.
+
+## Important Boundaries
+
+- `state_collapser` owns quotient-tower construction and partition-tower
+  semantics.
+- `jet_simplex_search` owns simplex enumeration, degenerate skeleton records,
+  fiber-addressed lifting, H-to-G skeletonization, H-lift counting, diagnostics,
+  and artifacts.
+- `HGraphML` is the separate quotient-tower-backed graph message-passing branch.
+  This repository does not implement neural message passing, CinchNET, or
+  PTVNN.
+- Kan replacement and horn-filling variants are not implemented here yet.
+- The current search is static: it uses a fixed tower rather than rebuilding the
+  tower during search.
+- This package is a GitHub source pre-release; PyPI publication is not part of
+  the current release posture.
+
+## Validation Commands
+
+Run these from the repository root:
+
+```bash
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+uv run python scripts/release_hygiene.py --repo-root .
+uv build
+```
+
+Focused checks:
+
+```bash
+uv run pytest tests/integration/test_state_collapser_static_tower.py
+uv run pytest tests/test_readme_quickstart.py
+uv run pytest tests/test_smoke_scripts.py tests/test_smoke_docs.py
+```
+
+## Current Posture
+
+- Version line: `0.1.0`.
+- Release framing: library pre-release.
+- Main dependency: `state-collapser` from the GitHub tag `v0.7.2`.
+- Core algorithmic promise: search over upstairs simplices is constrained by
+  known downstairs simplex fibers, not generated broadly and filtered afterward.
+- Public claims should stay bounded to implemented, tested behavior.
+- Benchmark-superiority claims, Kan replacement claims, neural message-passing
+  claims, and production-readiness claims should not be made from the current
+  repository state.

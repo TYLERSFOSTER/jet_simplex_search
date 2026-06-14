@@ -38,6 +38,17 @@ def test_release_hygiene_fails_on_strict_local_path(tmp_path: Path) -> None:
     assert any("Machine-local path" in failure.message for failure in report.failures)
 
 
+def test_release_hygiene_allows_escaped_text_block_markers(tmp_path: Path) -> None:
+    _write_minimal_tree(tmp_path)
+    (tmp_path / "tests" / "test_smoke_scripts.py").write_text(
+        'marker = "Output:\\n\\n```text\\n"\n'
+    )
+
+    report = release_hygiene.run_checks(tmp_path)
+
+    assert report.ok
+
+
 def test_release_hygiene_warns_on_historical_local_path(tmp_path: Path) -> None:
     _write_minimal_tree(tmp_path)
     log = tmp_path / "docs" / "engineer_continuity" / "log.md"

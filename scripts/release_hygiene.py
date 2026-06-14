@@ -16,6 +16,7 @@ STRICT_ROOT_FILES = (
     "RELEASE_NOTES.md",
     "SECURITY.md",
     "CONTRIBUTING.md",
+    "llms.txt",
     "pyproject.toml",
 )
 STRICT_DOC_FILES = (
@@ -38,7 +39,12 @@ CONTENT_FIXTURE_ALLOWLIST = {
     "tests/test_release_hygiene.py",
 }
 LOCAL_PATH_RE = re.compile(
-    r"(/Users/[^\s)>'\"]+|/private/tmp/[^\s)>'\"]+|/private/var/[^\s)>'\"]+|[A-Za-z]:\\[^\s)>'\"]+)"
+    r"("
+    r"/Users/[^\s)>'\"]+"
+    r"|/private/tmp/[^\s)>'\"]+"
+    r"|/private/var/[^\s)>'\"]+"
+    r"|[A-Za-z]:[\\/](?:Users|Program Files|ProgramData|Windows|Temp|tmp)[\\/][^\s)>'\"]+"
+    r")"
 )
 MARKDOWN_LINK_RE = re.compile(r"!?\[[^\]]+\]\(([^)]+)\)")
 SECRET_PATTERNS = (
